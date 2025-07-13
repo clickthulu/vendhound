@@ -57,3 +57,5 @@
 /app/.env
 /app/.env.dev
 /app/.env.test
+/.idea
+/.DS_Store
