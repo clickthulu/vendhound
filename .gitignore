@@ -50,3 +50,10 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+/docker-compose.yaml
+/docker/
+/etc/
+/secrets/
+/app/.env
+/app/.env.dev
+/app/.env.test
