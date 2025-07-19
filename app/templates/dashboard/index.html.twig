@@ -4,12 +4,19 @@
 
 {% block body %}
 <div class="block col p-3">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h3>VendHound Dashboard</h3>
+    <p>
+        This is where the landing page after the login will be.
+    </p>
+    <p>
+        Depending on the users role(s) they will be able to get an at-a-glance status
+        of the System.  From current progress on active votes, to full reports on general
+        voting, to last logins from users, etc.  There should be multiple dashboard widgets
+        active depending on the role.
+    </p>
+    <p>
+        Ideally, we should allow users to customize their dashboard to tailor their experience.
+    </p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/Users/sowersm/workspace/dracula/app/src/Controller/DashboardController.php</code></li>
-        <li>Your template at <code>/Users/sowersm/workspace/dracula/app/templates/dashboard/index.html.twig</code></li>
-    </ul>
 </div>
 {% endblock %}
