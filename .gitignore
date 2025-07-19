@@ -59,3 +59,7 @@
 /app/.env.test
 /.idea
 /.DS_Store
+/.env
+/init/
+/docker/php/create_env.php
+/app/public/info.php
