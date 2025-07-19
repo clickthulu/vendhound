@@ -17,4 +17,10 @@ final class DashboardController extends AbstractController
             'controller_name' => 'DashboardController',
         ]);
     }
+
+    #[Route('/left-blank', name: 'app_none')]
+    public function deliberatelyBlank(): Response
+    {
+        return $this->render('dashboard/no-page.html.twig');
+    }
 }
