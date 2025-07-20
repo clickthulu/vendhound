@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -35,6 +37,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isVerified = false;
+
+    #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
+    private ?DateTime $createdon = null;
+
+    public function __construct()
+    {
+        $this->createdon = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -114,6 +124,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCreatedon(): DateTime
+    {
+        return $this->createdon;
+    }
+
+    public function setCreatedon(DateTime $createdon): static
+    {
+        $this->createdon = $createdon;
 
         return $this;
     }
