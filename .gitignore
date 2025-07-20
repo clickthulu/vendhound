@@ -63,3 +63,6 @@
 /init/
 /docker/php/create_env.php
 /app/public/info.php
+/mariadb_password.txt
+/mariadb_root_password.txt
+/app/.env.orig

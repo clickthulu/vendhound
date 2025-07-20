@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\TableRepository;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TableRepository::class)]
@@ -29,11 +33,21 @@ class Table
     #[ORM\Column]
     private ?float $posY = 0;
 
-    #[ORM\Column]
-    private ?bool $isEndcap = false;
 
-    #[ORM\Column]
-    private ?bool $isMature = false;
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'tables')]
+    private Collection $tags;
+
+    #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
+    private DateTime $createdon;
+
+    public function __construct()
+    {
+        $this->createdon = new DateTime();
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +134,42 @@ class Table
     public function setIsMature(bool $isMature): static
     {
         $this->isMature = $isMature;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getCreatedon(): ?DateTime
+    {
+        return $this->createdon;
+    }
+
+    public function setCreatedon(DateTime $createdon): static
+    {
+        $this->createdon = $createdon;
 
         return $this;
     }
