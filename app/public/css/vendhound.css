@@ -2,7 +2,14 @@ body {
     background-color: #009900;
 }
 
+.sidebar-header {
+    font-size: 1.25em;
+    font-weight: bold;
+}
 
+.sidebar-item a {
+    text-decoration: none;
+}
 
 .block {
     background-color: #ffffff;
@@ -21,4 +28,8 @@ body {
     right: 50px;
     width: 400px;
     border: 2px solid black;
+}
+
+div.disabled a {
+    color: #999999;
 }
