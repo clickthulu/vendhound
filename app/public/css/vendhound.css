@@ -14,3 +14,11 @@ body {
     height: 300px;
     margin-top: calc(50% - 500px);
 }
+
+.alert {
+    position: fixed;
+    top: 25px;
+    right: 50px;
+    width: 400px;
+    border: 2px solid black;
+}
