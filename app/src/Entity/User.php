@@ -39,11 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?DateTime $createdOn = null;
+    private ?DateTime $created_on = null;
 
     public function __construct()
     {
-        $this->createdOn = new DateTime();
+        $this->created_on = new DateTime();
     }
 
     public function getId(): ?int
@@ -130,12 +130,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCreatedOn(): DateTime
     {
-        return $this->createdOn;
+        return $this->created_on;
     }
 
-    public function setCreatedOn(DateTime $createdOn): static
+    public function setCreatedOn(DateTime $created_on): static
     {
-        $this->createdOn = $createdOn;
+        $this->created_on = $created_on;
 
         return $this;
     }
