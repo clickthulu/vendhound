@@ -17,6 +17,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DeveloperController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
+    #[Route('/developer/flashTest', name: 'app_developer_flashtest')]
+    public function flashTest(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
+    {
+
+        $this->addFlash('success', 'SUCCESS This will only work in developer mode');
+        $this->addFlash('info', 'INFO This will only work in developer mode');
+        $this->addFlash('warning', 'WARNING This will only work in developer mode');
+        $this->addFlash('danger', 'ERROR This will only work in developer mode');
+
+        return $this->render('dashboard/no-page.html.twig');
+    }
+
     #[Route('/developer/promoteToAdmin', name: 'app_developer_promoteme')]
     public function makeMeAdminstrator(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
     {

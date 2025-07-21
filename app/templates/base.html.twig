@@ -25,12 +25,15 @@
         </div>
         {% set flashid = 0 %}
         {% if app.session.flashbag.peekAll|length > 0 %}
+            <div id="flash-container" class="row col-3 offset-9">
             {% for type, messages in app.session.flashbag.all %}
                 {% for message in messages %}
                     {% include "common/flash.html.twig" with { "type": type, "message": message, "id": flashid } %}
                     {% set flashid = flashid+1 %}
                 {% endfor %}
             {% endfor %}
+            </div>
+
         {% endif %}
 
 

@@ -1,8 +1,6 @@
-<div id="flash-{{ id }}" class="alert alert-{{ type }}" role="alert">
-    <div class="row">
-        <div class="col">
-            {{ message }}
-        </div>
-        <div class="col-1"><button class="btn btn-sm btn-close-flash" data-target="flash-{{ id }}"><i class="fas fa-close"></i></button></div>
+<div id="flash-{{ id }}" class="row alert alert-{{ type }}" role="alert">
+    <div class="col">
+        {{ message }}
     </div>
+    <div class="col-1"><button class="btn btn-sm btn-close-flash" data-target="flash-{{ id }}"><i class="fas fa-close"></i></button></div>
 </div>
