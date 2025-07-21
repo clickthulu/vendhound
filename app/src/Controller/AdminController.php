@@ -24,7 +24,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/define-table-type', name: 'app_table_type')]
+    #[Route('/admin/define-table-type', name: 'define-table-type')]
     public function defineTableType(Request $request , EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -46,16 +46,16 @@ final class AdminController extends AbstractController
 
                                 $entityManager->flush();
                                 $this->addFlash('info', 'Table type has been updated');
-                                return new RedirectResponse($this->generateUrl('table_types_list')); #TODO: make a page that lists the table types
+                                return new RedirectResponse($this->generateUrl('table-types-list'));
                             }
                         } catch (Exception $e){
                             $err = new FormError($e->getMessage());
                             $form->addError($err);
                         }
         return $this->render(
-                    'admin/table_types_editor.html.twig',
+                    'admin/define-table-type.html.twig',
                     [
-                        'tableTypeForm' => $form->createView()
+                        'TableTypeForm' => $form->createView()
                     ]
                 );
     }

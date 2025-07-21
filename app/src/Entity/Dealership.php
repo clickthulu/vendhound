@@ -21,10 +21,10 @@ class Dealership
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $taxid = null;
+    private ?string $taxID = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $productsandservices = null;
+    private ?string $productsAndServices = null;
 
     #[ORM\ManyToOne(inversedBy: 'dealerships')]
     private ?TableType $tableRequestType = null;
@@ -42,11 +42,11 @@ class Dealership
     private Collection $notes;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $createdon;
+    private DateTime $createdOn;
 
     public function __construct()
     {
-        $this->createdon = new DateTime();
+        $this->createdOn = new DateTime();
         $this->categories = new ArrayCollection();
         $this->notes = new ArrayCollection();
     }
@@ -70,24 +70,24 @@ class Dealership
 
     public function getTaxid(): ?string
     {
-        return $this->taxid;
+        return $this->taxID;
     }
 
-    public function setTaxid(?string $taxid): static
+    public function setTaxid(?string $taxID): static
     {
-        $this->taxid = $taxid;
+        $this->taxID = $taxID;
 
         return $this;
     }
 
-    public function getProductsandservices(): ?string
+    public function getProductsAndServices(): ?string
     {
-        return $this->productsandservices;
+        return $this->productsAndServices;
     }
 
-    public function setProductsandservices(?string $productsandservices): static
+    public function setProductsAndServices(?string $productsAndServices): static
     {
-        $this->productsandservices = $productsandservices;
+        $this->productsAndServices = $productsAndServices;
 
         return $this;
     }
@@ -161,17 +161,17 @@ class Dealership
     /**
      * @return DateTime
      */
-    public function getCreatedon(): DateTime
+    public function getCreatedOn(): DateTime
     {
-        return $this->createdon;
+        return $this->createdOn;
     }
 
     /**
-     * @param DateTime $createdon
+     * @param DateTime $createdOn
      */
-    public function setCreatedon(DateTime $createdon): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->createdon = $createdon;
+        $this->createdOn = $createdOn;
         return $this;
     }
 
