@@ -22,8 +22,14 @@ body {
     margin-top: calc(50% - 500px);
 }
 
-.alert {
+#flash-container {
     position: fixed;
+    top: 25px;
+    right: 50px;
+}
+
+.alert {
+    position: relative;
     top: 25px;
     right: 50px;
     width: 400px;
