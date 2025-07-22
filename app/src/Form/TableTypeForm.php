@@ -21,7 +21,7 @@ class TableTypeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => self::class,
+            'data_class' => TableType::class,
         ]);
     }
 }
