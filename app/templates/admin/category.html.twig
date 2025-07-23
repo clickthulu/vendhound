@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Server Settings{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Dealership Categories</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        {{ form_start(categoryForm)}}
+
+        <input type="submit" class="btn btn-primary" value="Add " />
+        {{ form_end(categoryForm) }}
+    </div>
+
+
+    {% for category in categories %}
+        <div class="row">
+            <div class="col">{{ category.name }}</div>
+            <div class="col-1">
+                <a href="{{ url('app_admin_categorydelete', { id: category.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
