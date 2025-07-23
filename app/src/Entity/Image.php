@@ -28,6 +28,13 @@ class Image
     #[ORM\Column]
     private ?int $size = null;
 
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $UploadedBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?Dealership $AssocDealership = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +96,30 @@ class Image
     public function setSize(int $size): static
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getUploadedBy(): ?User
+    {
+        return $this->UploadedBy;
+    }
+
+    public function setUploadedBy(?User $UploadedBy): static
+    {
+        $this->UploadedBy = $UploadedBy;
+
+        return $this;
+    }
+
+    public function getAssocDealership(): ?Dealership
+    {
+        return $this->AssocDealership;
+    }
+
+    public function setAssocDealership(?Dealership $AssocDealership): static
+    {
+        $this->AssocDealership = $AssocDealership;
 
         return $this;
     }

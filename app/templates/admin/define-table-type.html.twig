@@ -3,19 +3,28 @@
 {% block title %}Table Types{% endblock %}
 
 {% block body %}
-    <div class="block col p-3" id="">
-        <div class="row mb-3">
-            <div class="col">
-                <h3>Table Types</h3>
-            </div>
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Types of tables</h3>
         </div>
+    </div>
+
+    <div class="row">
         {{ form_start(tableTypeForm)}}
 
+        <input type="submit" class="btn btn-primary" value="Add " />
+        {{ form_end(tableTypeForm) }}
+    </div>
 
 
-
-
-        {{ form_end(tableTypeForm)}}
+    {% for tableType in tableTypes %}
+        <div class="row">
+            <div class="col">{{ tableType.name }}, {{ tableType.width }} UoMs by {{ tableType.depth }} UoMs</div> #TODO: Figure out how to display the unit of measurement here from the settings page
+            <div class="col-1">
+                <a href="{{ url('app_admin_table_type_delete', { id: tableType.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+            </div>
+        </div>
+    {% endfor %}
 </div>
-
 {% endblock %}

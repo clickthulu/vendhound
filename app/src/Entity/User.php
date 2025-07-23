@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -41,9 +43,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private ?DateTime $created_on = null;
 
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'UploadedBy', orphanRemoval: true)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->created_on = new DateTime();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,6 +145,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedOn(DateTime $created_on): static
     {
         $this->created_on = $created_on;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setUploadedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getUploadedBy() === $this) {
+                $image->setUploadedBy(null);
+            }
+        }
 
         return $this;
     }

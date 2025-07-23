@@ -2,7 +2,7 @@
 
 namespace App\Enumerations;
 
-class ImageUsageType implements OptionEnumerationInterface
+enum ImageUsageType: string implements OptionEnumerationInterface
 {
     const IMAGE_LOGO = 'Logo';
     const IMAGE_BANNER = 'Banner';

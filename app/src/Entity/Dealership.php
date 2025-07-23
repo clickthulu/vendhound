@@ -44,11 +44,18 @@ class Dealership
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private DateTime $created_on;
 
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'AssocDealership')]
+    private Collection $images;
+
     public function __construct()
     {
         $this->created_on = new DateTime();
         $this->categories = new ArrayCollection();
         $this->notes = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,6 +179,36 @@ class Dealership
     public function setCreatedOn(DateTime $created_on): static
     {
         $this->created_on = $created_on;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setAssocDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getAssocDealership() === $this) {
+                $image->setAssocDealership(null);
+            }
+        }
+
         return $this;
     }
 
