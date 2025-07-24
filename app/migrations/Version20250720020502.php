@@ -20,13 +20,13 @@ final class Version20250720020502 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, createdOn DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE dealership (id INT AUTO_INCREMENT NOT NULL, table_request_type_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, taxID VARCHAR(255) DEFAULT NULL, productsAndServices LONGTEXT DEFAULT NULL, createdOn DATETIME NOT NULL, INDEX IDX_7D7A975D2C1AB4C6 (table_request_type_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, createdo DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE dealership (id INT AUTO_INCREMENT NOT NULL, table_request_type_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, taxID VARCHAR(255) DEFAULT NULL, productsAndServices LONGTEXT DEFAULT NULL, createdon DATETIME NOT NULL, INDEX IDX_7D7A975D2C1AB4C6 (table_request_type_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE dealership_category (dealership_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_7170D6128CF5FC51 (dealership_id), INDEX IDX_7170D61212469DE2 (category_id), PRIMARY KEY(dealership_id, category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE note (id INT AUTO_INCREMENT NOT NULL, dealership_id INT DEFAULT NULL, author_id INT NOT NULL, title VARCHAR(255) NOT NULL, note LONGTEXT NOT NULL, createdOn DATETIME NOT NULL, INDEX IDX_CFBDFA148CF5FC51 (dealership_id), INDEX IDX_CFBDFA14F675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE note (id INT AUTO_INCREMENT NOT NULL, dealership_id INT DEFAULT NULL, author_id INT NOT NULL, title VARCHAR(255) NOT NULL, note LONGTEXT NOT NULL, createdon DATETIME NOT NULL, INDEX IDX_CFBDFA148CF5FC51 (dealership_id), INDEX IDX_CFBDFA14F675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE table_tag (table_id INT NOT NULL, tag_id INT NOT NULL, INDEX IDX_A6C3DE7ECFF285C (table_id), INDEX IDX_A6C3DE7BAD26311 (tag_id), PRIMARY KEY(table_id, tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE table_type (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, width DOUBLE PRECISION NOT NULL, depth DOUBLE PRECISION NOT NULL, createdOn DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE tag (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, createdOn DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE table_type (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, width DOUBLE PRECISION NOT NULL, depth DOUBLE PRECISION NOT NULL, createdon DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE tag (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, createdon DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE dealership ADD CONSTRAINT FK_7D7A975D2C1AB4C6 FOREIGN KEY (table_request_type_id) REFERENCES table_type (id)');
         $this->addSql('ALTER TABLE dealership_category ADD CONSTRAINT FK_7170D6128CF5FC51 FOREIGN KEY (dealership_id) REFERENCES dealership (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE dealership_category ADD CONSTRAINT FK_7170D61212469DE2 FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE');
@@ -34,8 +34,8 @@ final class Version20250720020502 extends AbstractMigration
         $this->addSql('ALTER TABLE note ADD CONSTRAINT FK_CFBDFA14F675F31B FOREIGN KEY (author_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE table_tag ADD CONSTRAINT FK_A6C3DE7ECFF285C FOREIGN KEY (table_id) REFERENCES `table` (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE table_tag ADD CONSTRAINT FK_A6C3DE7BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE `table` ADD createdOn DATETIME NOT NULL, DROP is_endcap, DROP is_mature');
-        $this->addSql('ALTER TABLE user ADD createdOn DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE `table` ADD createdon DATETIME NOT NULL, DROP is_endcap, DROP is_mature');
+        $this->addSql('ALTER TABLE user ADD createdon DATETIME NOT NULL');
     }
 
     public function down(Schema $schema): void

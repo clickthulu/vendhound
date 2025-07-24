@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Enumerations\ImageUsageType;
 use App\Repository\ImageRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
@@ -34,6 +36,9 @@ class Image
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Dealership $AssocDealership = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: ImageUsageType::class)]
+    private ?array $UsageType = null;
 
     public function getId(): ?int
     {
@@ -120,6 +125,21 @@ class Image
     public function setAssocDealership(?Dealership $AssocDealership): static
     {
         $this->AssocDealership = $AssocDealership;
+
+        return $this;
+    }
+
+    /**
+     * @return ImageUsageType[]|null
+     */
+    public function getUsageType(): ?array
+    {
+        return $this->UsageType;
+    }
+
+    public function setUsageType(?array $UsageType): static
+    {
+        $this->UsageType = $UsageType;
 
         return $this;
     }

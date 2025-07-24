@@ -50,12 +50,32 @@ class Dealership
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'AssocDealership')]
     private Collection $images;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'assoc_dealership')]
+    private Collection $users;
+
+    #[ORM\Column]
+    private ?bool $is_accepted = null;
+
+    #[ORM\Column]
+    private ?bool $is_paid = null;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voted_for')]
+    private Collection $votes;
+
     public function __construct()
     {
         $this->created_on = new DateTime();
         $this->categories = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +226,90 @@ class Dealership
             // set the owning side to null (unless already changed)
             if ($image->getAssocDealership() === $this) {
                 $image->setAssocDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setAssocDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getAssocDealership() === $this) {
+                $user->setAssocDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isAccepted(): ?bool
+    {
+        return $this->is_accepted;
+    }
+
+    public function setIsAccepted(bool $is_accepted): static
+    {
+        $this->is_accepted = $is_accepted;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->is_paid;
+    }
+
+    public function setIsPaid(bool $is_paid): static
+    {
+        $this->is_paid = $is_paid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): static
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setVotedFor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): static
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getVotedFor() === $this) {
+                $vote->setVotedFor(null);
             }
         }
 

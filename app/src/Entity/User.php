@@ -49,10 +49,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'UploadedBy', orphanRemoval: true)]
     private Collection $images;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Dealership $assoc_dealership = null;
+
+    #[ORM\Column]
+    private ?bool $is_registered = null;
+
+    #[ORM\Column]
+    private ?bool $is_paid = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone_number = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mailing_address = null;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voter_id', orphanRemoval: true)]
+    private Collection $votes;
+
+    /**
+     * @var Collection<int, VoteEvent>
+     */
+    #[ORM\OneToMany(targetEntity: VoteEvent::class, mappedBy: 'added_by')]
+    private Collection $voteEvents;
+
     public function __construct()
     {
         $this->created_on = new DateTime();
         $this->images = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+        $this->voteEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,6 +202,126 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($image->getUploadedBy() === $this) {
                 $image->setUploadedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAssocDealership(): ?Dealership
+    {
+        return $this->assoc_dealership;
+    }
+
+    public function setAssocDealership(?Dealership $assoc_dealership): static
+    {
+        $this->assoc_dealership = $assoc_dealership;
+
+        return $this;
+    }
+
+    public function isRegistered(): ?bool
+    {
+        return $this->is_registered;
+    }
+
+    public function setIsRegistered(bool $is_registered): static
+    {
+        $this->is_registered = $is_registered;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->is_paid;
+    }
+
+    public function setIsPaid(bool $is_paid): static
+    {
+        $this->is_paid = $is_paid;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phone_number;
+    }
+
+    public function setPhoneNumber(?string $phone_number): static
+    {
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getMailingAddress(): ?string
+    {
+        return $this->mailing_address;
+    }
+
+    public function setMailingAddress(?string $mailing_address): static
+    {
+        $this->mailing_address = $mailing_address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): static
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setVoterId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): static
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getVoterId() === $this) {
+                $vote->setVoterId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoteEvent>
+     */
+    public function getVoteEvents(): Collection
+    {
+        return $this->voteEvents;
+    }
+
+    public function addVoteEvent(VoteEvent $voteEvent): static
+    {
+        if (!$this->voteEvents->contains($voteEvent)) {
+            $this->voteEvents->add($voteEvent);
+            $voteEvent->setAddedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteEvent(VoteEvent $voteEvent): static
+    {
+        if ($this->voteEvents->removeElement($voteEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($voteEvent->getAddedBy() === $this) {
+                $voteEvent->setAddedBy(null);
             }
         }
 
