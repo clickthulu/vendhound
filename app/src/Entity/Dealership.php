@@ -21,10 +21,10 @@ class Dealership
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $taxid = null;
+    private ?string $taxID = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $productsandservices = null;
+    private ?string $productsAndServices = null;
 
     #[ORM\ManyToOne(inversedBy: 'dealerships')]
     private ?TableType $tableRequestType = null;
@@ -42,13 +42,40 @@ class Dealership
     private Collection $notes;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $createdon;
+    private DateTime $created_on;
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'AssocDealership')]
+    private Collection $images;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'assoc_dealership')]
+    private Collection $users;
+
+    #[ORM\Column]
+    private ?bool $is_accepted = null;
+
+    #[ORM\Column]
+    private ?bool $is_paid = null;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voted_for')]
+    private Collection $votes;
 
     public function __construct()
     {
-        $this->createdon = new DateTime();
+        $this->created_on = new DateTime();
         $this->categories = new ArrayCollection();
         $this->notes = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,24 +97,24 @@ class Dealership
 
     public function getTaxid(): ?string
     {
-        return $this->taxid;
+        return $this->taxID;
     }
 
-    public function setTaxid(?string $taxid): static
+    public function setTaxid(?string $taxID): static
     {
-        $this->taxid = $taxid;
+        $this->taxID = $taxID;
 
         return $this;
     }
 
-    public function getProductsandservices(): ?string
+    public function getProductsAndServices(): ?string
     {
-        return $this->productsandservices;
+        return $this->productsAndServices;
     }
 
-    public function setProductsandservices(?string $productsandservices): static
+    public function setProductsAndServices(?string $productsAndServices): static
     {
-        $this->productsandservices = $productsandservices;
+        $this->productsAndServices = $productsAndServices;
 
         return $this;
     }
@@ -161,17 +188,131 @@ class Dealership
     /**
      * @return DateTime
      */
-    public function getCreatedon(): DateTime
+    public function getCreatedOn(): DateTime
     {
-        return $this->createdon;
+        return $this->created_on;
     }
 
     /**
-     * @param DateTime $createdon
+     * @param DateTime $created_on
      */
-    public function setCreatedon(DateTime $createdon): static
+    public function setCreatedOn(DateTime $created_on): static
     {
-        $this->createdon = $createdon;
+        $this->created_on = $created_on;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setAssocDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getAssocDealership() === $this) {
+                $image->setAssocDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setAssocDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getAssocDealership() === $this) {
+                $user->setAssocDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isAccepted(): ?bool
+    {
+        return $this->is_accepted;
+    }
+
+    public function setIsAccepted(bool $is_accepted): static
+    {
+        $this->is_accepted = $is_accepted;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->is_paid;
+    }
+
+    public function setIsPaid(bool $is_paid): static
+    {
+        $this->is_paid = $is_paid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): static
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setVotedFor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): static
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getVotedFor() === $this) {
+                $vote->setVotedFor(null);
+            }
+        }
+
         return $this;
     }
 

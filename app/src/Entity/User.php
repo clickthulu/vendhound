@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -39,11 +41,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?DateTime $createdon = null;
+    private ?DateTime $created_on = null;
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'UploadedBy', orphanRemoval: true)]
+    private Collection $images;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Dealership $assoc_dealership = null;
+
+    #[ORM\Column]
+    private ?bool $is_registered = null;
+
+    #[ORM\Column]
+    private ?bool $is_paid = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone_number = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mailing_address = null;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voter_id', orphanRemoval: true)]
+    private Collection $votes;
+
+    /**
+     * @var Collection<int, VoteEvent>
+     */
+    #[ORM\OneToMany(targetEntity: VoteEvent::class, mappedBy: 'added_by')]
+    private Collection $voteEvents;
 
     public function __construct()
     {
-        $this->createdon = new DateTime();
+        $this->created_on = new DateTime();
+        $this->images = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+        $this->voteEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,14 +166,164 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedon(): DateTime
+    public function getCreatedOn(): DateTime
     {
-        return $this->createdon;
+        return $this->created_on;
     }
 
-    public function setCreatedon(DateTime $createdon): static
+    public function setCreatedOn(DateTime $created_on): static
     {
-        $this->createdon = $createdon;
+        $this->created_on = $created_on;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setUploadedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getUploadedBy() === $this) {
+                $image->setUploadedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAssocDealership(): ?Dealership
+    {
+        return $this->assoc_dealership;
+    }
+
+    public function setAssocDealership(?Dealership $assoc_dealership): static
+    {
+        $this->assoc_dealership = $assoc_dealership;
+
+        return $this;
+    }
+
+    public function isRegistered(): ?bool
+    {
+        return $this->is_registered;
+    }
+
+    public function setIsRegistered(bool $is_registered): static
+    {
+        $this->is_registered = $is_registered;
+
+        return $this;
+    }
+
+    public function isPaid(): ?bool
+    {
+        return $this->is_paid;
+    }
+
+    public function setIsPaid(bool $is_paid): static
+    {
+        $this->is_paid = $is_paid;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phone_number;
+    }
+
+    public function setPhoneNumber(?string $phone_number): static
+    {
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getMailingAddress(): ?string
+    {
+        return $this->mailing_address;
+    }
+
+    public function setMailingAddress(?string $mailing_address): static
+    {
+        $this->mailing_address = $mailing_address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): static
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setVoterId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): static
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getVoterId() === $this) {
+                $vote->setVoterId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoteEvent>
+     */
+    public function getVoteEvents(): Collection
+    {
+        return $this->voteEvents;
+    }
+
+    public function addVoteEvent(VoteEvent $voteEvent): static
+    {
+        if (!$this->voteEvents->contains($voteEvent)) {
+            $this->voteEvents->add($voteEvent);
+            $voteEvent->setAddedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteEvent(VoteEvent $voteEvent): static
+    {
+        if ($this->voteEvents->removeElement($voteEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($voteEvent->getAddedBy() === $this) {
+                $voteEvent->setAddedBy(null);
+            }
+        }
 
         return $this;
     }

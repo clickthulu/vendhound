@@ -29,11 +29,11 @@ class Note
     private ?User $author = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $createdon;
+    private DateTime $created_on;
 
     public function __construct()
     {
-        $this->createdon = new DateTime();
+        $this->created_on = new DateTime();
     }
 
     public function getId(): ?int
@@ -89,14 +89,14 @@ class Note
         return $this;
     }
 
-    public function getCreatedon(): DateTime
+    public function getCreatedOn(): DateTime
     {
-        return $this->createdon;
+        return $this->created_on;
     }
 
-    public function setCreatedon(DateTime $createdon): static
+    public function setCreatedOn(DateTime $created_on): static
     {
-        $this->createdon = $createdon;
+        $this->created_on = $created_on;
 
         return $this;
     }
