@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Comic;
-use App\Entity\HotBox;
 use App\Entity\Image;
 use App\Entity\Settings;
 use App\Entity\SettingsCollection;
@@ -19,27 +17,10 @@ class SettingsService
     {
         $this->settingsCollection = new SettingsCollection();
 
-        $dbsettings = $entityManager->getRepository(Settings::class)->findAll();
-        foreach ($dbsettings as $dbsetting) {
-            $this->settingsCollection->addItem($dbsetting);
+        $databaseSettings = $entityManager->getRepository(Settings::class)->findAll();
+        foreach ($databaseSettings as $setting) {
+            $this->settingsCollection->addItem($setting);
         }
-
-        $owner = $parameterBag->get('serverOwner');
-        $ownerSettings = new Settings();
-        $ownerSettings->setType('string')->setSetting('server_owner')->setValue($owner);
-        $this->settingsCollection->addItem($ownerSettings);
-
-        $unapprovedComics = $entityManager->getRepository(Comic::class)->findBy(['approved' => false]);
-        $comics = new Settings();
-        $comics->setType('int')->setSetting('comics_pending')->setValue(count($unapprovedComics));
-        $this->settingsCollection->addItem($comics);
-
-        $unapprovedImages = $entityManager->getRepository(Image::class)->findImagesForActiveComics(['com.approved' => true, 'img.approved' => false]);
-        $images = new Settings();
-        $images->setType('int')->setSetting('images_pending')->setValue(count($unapprovedImages));
-        $this->settingsCollection->addItem($images);
-
-
 
     }
 

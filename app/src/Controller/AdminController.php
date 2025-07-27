@@ -86,45 +86,59 @@ final class AdminController extends AbstractController
         return new RedirectResponse($this->generateUrl('app_admin_category'));
     }
 
-    #[Route('/admin/define-table-type', name: 'define-table-type')]
-    public function defineTableType(Request $request , EntityManagerInterface $entityManager): Response
+    #[Route('/admin/table-type', name: 'app_admin_tabletype')]
+    public function listTableType(Request $request , EntityManagerInterface $entityManager): Response
+    {
+        $tableTypes = $entityManager->getRepository(TableType::class)->findBy([], ['name' => 'ASC']);
+
+        return $this->render('admin/table-type.html.twig', [
+            'tableTypes' => $tableTypes
+        ]);
+
+    }
+
+    #[Route('/admin/table-type/edit/{id}', name: 'app_admin_tabletypeedit')]
+    #[Route('/admin/table-type/create', name: 'app_admin_tabletypecreate')]
+    public function defineTableType(Request $request , EntityManagerInterface $entityManager, ?int $id = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-                /**
-                 * @var User $user
-                 */
-                $user = $this->getUser();
-                if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
-                    $this->addFlash('error', 'You do not have permission to perform this action');
-                    return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
-                }
-                $tableType = new TableType();
-                $form = $this->createForm(TableTypeForm::class, $tableType);
-                $form->handleRequest($request);
-                try {
-                            if ($form->isSubmitted() && $form->isValid()) {
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+        $tableType = new TableType();
+        $action = 'created';
 
-                                    $entityManager->persist($tableType);
+        if (!empty($id)) {
+            $tableType = $entityManager->getRepository(TableType::class)->find($id);
+            $action = 'updated';
+        }
 
-                                $entityManager->flush();
-                                $this->addFlash('info', 'Table type has been updated');
-                                return new RedirectResponse($this->generateUrl('table-types-list'));
-                            }
-                        } catch (Exception $e){
-                            $err = new FormError($e->getMessage());
-                            $form->addError($err);
-                        }
-        $tableTypes = $entityManager->getRepository(TableType::class)->findAll();
-
+        $form = $this->createForm(TableTypeForm::class, $tableType);
+        $form->handleRequest($request);
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($tableType);
+                $entityManager->flush();
+                $this->addFlash('info', "Table type {$tableType->getName()} has been {$action}");
+                return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
+            }
+        } catch (Exception $e){
+            $err = new FormError($e->getMessage());
+            $form->addError($err);
+        }
         return $this->render(
-                    'admin/define-table-type.html.twig',
-                    [
-                        'tableTypeForm' => $form->createView(),
-                        'tableTypes' => $tableTypes
-                    ]
-                );
+            'admin/define-table-type.html.twig',
+            [
+                'tableTypeForm' => $form->createView(),
+            ]
+        );
     }
-    #[Route('/admin/tableType/delete/{id}', name: 'app_admin_table_type_delete')]
+    #[Route('/admin/table-type/delete/{id}', name: 'app_admin_tabletypedelete')]
     public function deleteTableType(EntityManagerInterface $entityManager, string $id): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Table Types{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Table Types</h3>
+        </div>
+    </div>
+
+    <td class="row">
+        <tr class="col">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-1">#</th>
+                    <th>Table Type</th>
+                    <th class="col-2 text-end"><a href="{{ url('app_admin_tabletypecreate') }}" class="btn btn-primary">Create</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for table in tableTypes %}
+                    <tr>
+                        <td class="col-1">{{ loop.index0 +1 }}</td>
+                        <td class="col">{{ table.name }} ( {{ table.width }}{{ settings.get('unit_of_measurement').value }} x {{ table.depth }}{{ settings.get('unit_of_measurement').value }} )</td>
+                        <td class="btn-group">
+                            <a href="{{ url('app_admin_tabletypeedit', { id: table.id }) }}" class="btn btn-small btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url('app_admin_tabletypedelete', { id: table.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
