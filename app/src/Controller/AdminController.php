@@ -55,7 +55,7 @@ final class AdminController extends AbstractController
             $this->addFlash('danger', "An error has occured: {$e->getMessage()}");
         }
 
-        $categories = $entityManager->getRepository(Category::class)->findAll();
+        $categories = $entityManager->getRepository(Category::class)->findBy([], ['name' => 'ASC']);
 
         return $this->render('admin/category.html.twig', [
             'categoryForm' => $form->createView(),
