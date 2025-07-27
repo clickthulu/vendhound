@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VoteRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VoteRepository::class)]
@@ -15,23 +16,28 @@ class Vote
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $voter_id = null;
+    private ?User $voterId = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
-    private ?Dealership $voted_for = null;
+    private ?Dealership $votedFor = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?VoteEvent $event_id = null;
+    private ?VoteEvent $eventId = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $last_updated = null;
+    private ?DateTime $lastUpdated = null;
 
     #[ORM\Column]
-    private ?\DateTime $created_on = null;
+    private DateTime $createdOn;
 
     #[ORM\Column]
-    private ?int $update_count = 0;
+    private ?int $updateCount = 0;
+
+    public function __construct()
+    {
+        $this->createdOn = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -40,72 +46,72 @@ class Vote
 
     public function getVoterId(): ?User
     {
-        return $this->voter_id;
+        return $this->voterId;
     }
 
-    public function setVoterId(?User $voter_id): static
+    public function setVoterId(?User $voterId): static
     {
-        $this->voter_id = $voter_id;
+        $this->voterId = $voterId;
 
         return $this;
     }
 
     public function getVotedFor(): ?Dealership
     {
-        return $this->voted_for;
+        return $this->votedFor;
     }
 
-    public function setVotedFor(?Dealership $voted_for): static
+    public function setVotedFor(?Dealership $votedFor): static
     {
-        $this->voted_for = $voted_for;
+        $this->votedFor = $votedFor;
 
         return $this;
     }
 
     public function getEventId(): ?VoteEvent
     {
-        return $this->event_id;
+        return $this->eventId;
     }
 
-    public function setEventId(?VoteEvent $event_id): static
+    public function setEventId(?VoteEvent $eventId): static
     {
-        $this->event_id = $event_id;
+        $this->eventId = $eventId;
 
         return $this;
     }
 
-    public function getLastUpdated(): ?\DateTime
+    public function getLastUpdated(): ?DateTime
     {
-        return $this->last_updated;
+        return $this->lastUpdated;
     }
 
-    public function setLastUpdated(?\DateTime $last_updated): static
+    public function setLastUpdated(?DateTime $lastUpdated): static
     {
-        $this->last_updated = $last_updated;
+        $this->lastUpdated = $lastUpdated;
 
         return $this;
     }
 
-    public function getCreatedOn(): ?\DateTime
+    public function getCreatedOn(): ?DateTime
     {
-        return $this->created_on;
+        return $this->createdOn;
     }
 
-    public function setCreatedOn(\DateTime $created_on): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->created_on = $created_on;
+        $this->createdOn = $createdOn;
 
         return $this;
     }
 
     public function getUpdateCount(): ?int
     {
-        return $this->update_count;
+        return $this->updateCount;
     }
 
-    public function setUpdateCount(int $update_count): static
+    public function setUpdateCount(int $updateCount): static
     {
-        $this->update_count = $update_count;
+        $this->updateCount = $updateCount;
 
         return $this;
     }

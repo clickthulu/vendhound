@@ -22,16 +22,16 @@ class Table
     private ?string $locationName = null;
 
     #[ORM\Column]
-    private ?float $width = 0;
+    private float $width = 0;
 
     #[ORM\Column]
-    private ?float $depth = 0;
+    private float $depth = 0;
 
     #[ORM\Column]
-    private ?float $posX = 0;
+    private float $positionX = 0;
 
     #[ORM\Column]
-    private ?float $posY = 0;
+    private float $positionY = 0;
 
 
     /**
@@ -41,11 +41,11 @@ class Table
     private Collection $tags;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $created_on;
+    private DateTime $createdOn;
 
     public function __construct()
     {
-        $this->created_on = new DateTime();
+        $this->createdOn = new DateTime();
         $this->tags = new ArrayCollection();
     }
 
@@ -90,26 +90,26 @@ class Table
         return $this;
     }
 
-    public function getPosX(): ?float
+    public function getPositionX(): ?float
     {
-        return $this->posX;
+        return $this->positionX;
     }
 
-    public function setPosX(float $posX): static
+    public function setPositionX(float $positionX): static
     {
-        $this->posX = $posX;
+        $this->positionX = $positionX;
 
         return $this;
     }
 
-    public function getPosY(): ?float
+    public function getPositionY(): ?float
     {
-        return $this->posY;
+        return $this->positionY;
     }
 
-    public function setPosY(float $posY): static
+    public function setPositionY(float $positionY): static
     {
-        $this->posY = $posY;
+        $this->positionY = $positionY;
 
         return $this;
     }
@@ -164,12 +164,12 @@ class Table
 
     public function getCreatedOn(): ?DateTime
     {
-        return $this->created_on;
+        return $this->createdOn;
     }
 
-    public function setCreatedOn(DateTime $created_on): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->created_on = $created_on;
+        $this->createdOn = $createdOn;
 
         return $this;
     }
