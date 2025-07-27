@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Server Settings{% endblock %}
+{% block title %}Admin - Categories{% endblock %}
 
 {% block body %}
 <div class="block col p-3" id="">
@@ -10,21 +10,39 @@
         </div>
     </div>
 
+    {{ form_start(categoryForm)}}
     <div class="row">
-        {{ form_start(categoryForm)}}
-
-        <input type="submit" class="btn btn-primary" value="Add " />
-        {{ form_end(categoryForm) }}
-    </div>
-
-
-    {% for category in categories %}
-        <div class="row">
-            <div class="col">{{ category.name }}</div>
-            <div class="col-1">
-                <a href="{{ url('app_admin_categorydelete', { id: category.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
-            </div>
+        {{ form_label(categoryForm.name) }}
+        <div class="col input-group">
+            {{ form_widget(categoryForm.name) }}
+            <input type="submit" class="btn btn-primary" value="Add " />
         </div>
-    {% endfor %}
+    </div>
+    {{ form_end(categoryForm) }}
+
+    <td class="row">
+        <tr class="col">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Category</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td class="col-1">{{ loop.index0 +1 }}</td>
+                        <td class="col">{{ category.name }}</td>
+                        <td class="col-1 text-end">
+                            <a href="{{ url('app_admin_categorydelete', { id: category.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

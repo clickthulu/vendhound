@@ -23,9 +23,9 @@ class CategoryTypeForm extends AbstractType
                         'class' => 'form-control',
                         'required' => true
                     ],
-                    'label' => 'Category',
+                    'label' => 'Category:',
                     'label_attr' => [
-                        'class' => 'form-label col-3 text-end'
+                        'class' => 'form-label col-3 text-end fw-bold'
                     ]
                 ]
             )

@@ -16,10 +16,48 @@ class TableTypeForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('width', NumberType::class)
-            ->add('depth', NumberType::class)
-            ->add('save', SubmitType::class)
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'attr' => [
+                        'class' => 'form-control',
+                        'required' => true
+                    ],
+                    'label' => 'Name:',
+                    'label_attr' => [
+                        'class' => 'form-label col-3 text-end fw-bold'
+                    ]
+                ]
+            )
+            ->add(
+                'width',
+                NumberType::class,
+                [
+                    'attr' => [
+                        'class' => 'form-control',
+                        'required' => true
+                    ],
+                    'label' => 'Width:',
+                    'label_attr' => [
+                        'class' => 'form-label col-3 text-end fw-bold'
+                    ]
+                ]
+            )
+            ->add(
+                'depth',
+                NumberType::class,
+                [
+                    'attr' => [
+                        'class' => 'form-control',
+                        'required' => true
+                    ],
+                    'label' => 'Depth:',
+                    'label_attr' => [
+                        'class' => 'form-label col-3 text-end fw-bold'
+                    ]
+                ]
+            )
         ;
     }
 
