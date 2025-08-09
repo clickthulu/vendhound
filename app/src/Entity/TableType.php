@@ -35,6 +35,9 @@ class TableType
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private DateTime $createdOn;
 
+    #[ORM\Column]
+    private ?int $num_user_slots = 1;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
@@ -127,6 +130,18 @@ class TableType
     public function setCreatedOn(DateTime $createdOn): static
     {
         $this->createdOn = $createdOn;
+        return $this;
+    }
+
+    public function getNumUserSlots(): ?int
+    {
+        return $this->num_user_slots;
+    }
+
+    public function setNumUserSlots(int $num_user_slots): static
+    {
+        $this->num_user_slots = $num_user_slots;
+
         return $this;
     }
 
