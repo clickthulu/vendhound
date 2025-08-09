@@ -2,6 +2,7 @@ twig:
     file_name_pattern: '*.twig'
     globals:
         app_env: '%app.environment%'
+        settings: '@App\Service\SettingsService'
 when@test:
     twig:
         strict_variables: true

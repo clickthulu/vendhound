@@ -1,30 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Table Types{% endblock %}
+{% block title %}Create/Update Table Types{% endblock %}
 
 {% block body %}
 <div class="block col p-3" id="">
     <div class="row mb-3">
         <div class="col">
-            <h3>Types of tables</h3>
+            <h3>Create / Update Table Type</h3>
         </div>
     </div>
-
-    <div class="row">
-        {{ form_start(tableTypeForm)}}
-
-        <input type="submit" class="btn btn-primary" value="Add " />
-        {{ form_end(tableTypeForm) }}
-    </div>
-
-
-    {% for tableType in tableTypes %}
-        <div class="row">
-            <div class="col">{{ tableType.name }}, {{ tableType.width }} UoMs by {{ tableType.depth }} UoMs</div> #TODO: Figure out how to display the unit of measurement here from the settings page
-            <div class="col-1">
-                <a href="{{ url('app_admin_table_type_delete', { id: tableType.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
-            </div>
+    {{ form_start(tableTypeForm)}}
+    <div class="row mb-3">
+        {{ form_label(tableTypeForm.name) }}
+        <div class="col">
+            {{ form_widget(tableTypeForm.name) }}
         </div>
-    {% endfor %}
+    </div>
+    <div class="row mb-3">
+        {{ form_label(tableTypeForm.width) }}
+        <div class="col">
+            {{ form_widget(tableTypeForm.width) }}
+        </div>
+        <div class="col-2">
+            {{ settings.get('unit_of_measurement').value }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        {{ form_label(tableTypeForm.depth) }}
+        <div class="col">
+            {{ form_widget(tableTypeForm.depth) }}
+        </div>
+        <div class="col-2">
+            {{ settings.get('unit_of_measurement').value }}
+        </div>
+    </div>
+    <div class="row mb-3">
+    <div class="col offset-3">
+        <input type="submit" class="btn btn-primary" value="Save Table Type " />
+    </div>
+    {{ form_end(tableTypeForm) }}
+
 </div>
 {% endblock %}

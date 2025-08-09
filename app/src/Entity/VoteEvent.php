@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VoteEventRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,19 +18,22 @@ class VoteEvent
 
     #[ORM\ManyToOne(inversedBy: 'voteEvents')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $added_by = null;
+    private ?User $addedBy = null;
 
     #[ORM\Column]
-    private ?int $votes_per_curator = null;
+    private ?int $votesPerCurator = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $start_time = null;
+    private ?DateTime $startTime = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $end_time = null;
+    private ?DateTime $endTime = null;
 
     #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?bool $isActive = null;
+
+    #[ORM\Column]
+    private DateTime $createdOn;
 
     /**
      * @var Collection<int, Vote>
@@ -39,6 +43,7 @@ class VoteEvent
 
     public function __construct()
     {
+        $this->createdOn = new DateTime();
         $this->votes = new ArrayCollection();
     }
 
@@ -49,60 +54,60 @@ class VoteEvent
 
     public function getAddedBy(): ?User
     {
-        return $this->added_by;
+        return $this->addedBy;
     }
 
-    public function setAddedBy(?User $added_by): static
+    public function setAddedBy(?User $addedBy): static
     {
-        $this->added_by = $added_by;
+        $this->addedBy = $addedBy;
 
         return $this;
     }
 
     public function getVotesPerCurator(): ?int
     {
-        return $this->votes_per_curator;
+        return $this->votesPerCurator;
     }
 
-    public function setVotesPerCurator(int $votes_per_curator): static
+    public function setVotesPerCurator(int $votesPerCurator): static
     {
-        $this->votes_per_curator = $votes_per_curator;
+        $this->votesPerCurator = $votesPerCurator;
 
         return $this;
     }
 
-    public function getStartTime(): ?\DateTime
+    public function getStartTime(): ?DateTime
     {
-        return $this->start_time;
+        return $this->startTime;
     }
 
-    public function setStartTime(?\DateTime $start_time): static
+    public function setStartTime(?DateTime $startTime): static
     {
-        $this->start_time = $start_time;
+        $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getEndTime(): ?\DateTime
+    public function getEndTime(): ?DateTime
     {
-        return $this->end_time;
+        return $this->endTime;
     }
 
-    public function setEndTime(?\DateTime $end_time): static
+    public function setEndTime(?DateTime $endTime): static
     {
-        $this->end_time = $end_time;
+        $this->endTime = $endTime;
 
         return $this;
     }
 
     public function isActive(): ?bool
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
-    public function setIsActive(bool $is_active): static
+    public function setIsActive(bool $isActive): static
     {
-        $this->is_active = $is_active;
+        $this->isActive = $isActive;
 
         return $this;
     }
@@ -136,4 +141,22 @@ class VoteEvent
 
         return $this;
     }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedOn(): DateTime
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * @param DateTime $createdOn
+     */
+    public function setCreatedOn(DateTime $createdOn): void
+    {
+        $this->createdOn = $createdOn;
+    }
+
+
 }

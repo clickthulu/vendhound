@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?DateTime $created_on = null;
+    private DateTime $createdOn;
 
     /**
      * @var Collection<int, Image>
@@ -50,19 +50,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $images;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Dealership $assoc_dealership = null;
+    private ?Dealership $dealership = null;
 
     #[ORM\Column]
-    private ?bool $is_registered = null;
+    private bool $isRegistered = false;
 
     #[ORM\Column]
-    private ?bool $is_paid = null;
+    private bool $isPaid = false;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $phone_number = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $mailing_address = null;
+    private ?string $phoneNumber = null;
 
     /**
      * @var Collection<int, Vote>
@@ -78,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->created_on = new DateTime();
+        $this->createdOn = new DateTime();
         $this->images = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->voteEvents = new ArrayCollection();
@@ -168,12 +165,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCreatedOn(): DateTime
     {
-        return $this->created_on;
+        return $this->createdOn;
     }
 
-    public function setCreatedOn(DateTime $created_on): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->created_on = $created_on;
+        $this->createdOn = $createdOn;
 
         return $this;
     }
@@ -208,65 +205,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAssocDealership(): ?Dealership
+    public function getDealership(): ?Dealership
     {
-        return $this->assoc_dealership;
+        return $this->dealership;
     }
 
-    public function setAssocDealership(?Dealership $assoc_dealership): static
+    public function setDealership(?Dealership $dealership): static
     {
-        $this->assoc_dealership = $assoc_dealership;
+        $this->dealership = $dealership;
 
         return $this;
     }
 
     public function isRegistered(): ?bool
     {
-        return $this->is_registered;
+        return $this->isRegistered;
     }
 
-    public function setIsRegistered(bool $is_registered): static
+    public function setIsRegistered(bool $isRegistered): static
     {
-        $this->is_registered = $is_registered;
+        $this->isRegistered = $isRegistered;
 
         return $this;
     }
 
     public function isPaid(): ?bool
     {
-        return $this->is_paid;
+        return $this->isPaid;
     }
 
-    public function setIsPaid(bool $is_paid): static
+    public function setIsPaid(bool $isPaid): static
     {
-        $this->is_paid = $is_paid;
+        $this->isPaid = $isPaid;
 
         return $this;
     }
 
     public function getPhoneNumber(): ?string
     {
-        return $this->phone_number;
+        return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(?string $phone_number): static
+    public function setPhoneNumber(?string $phoneNumber): static
     {
-        $this->phone_number = $phone_number;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
 
-    public function getMailingAddress(): ?string
-    {
-        return $this->mailing_address;
-    }
-
-    public function setMailingAddress(?string $mailing_address): static
-    {
-        $this->mailing_address = $mailing_address;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Vote>

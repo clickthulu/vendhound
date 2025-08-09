@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enumerations\ImageUsageType;
 use App\Repository\ImageRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -39,6 +40,15 @@ class Image
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: ImageUsageType::class)]
     private ?array $UsageType = null;
+
+    #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
+    private DateTime $createdOn;
+
+    public function __construct()
+    {
+        $this->createdOn = new DateTime();
+    }
+
 
     public function getId(): ?int
     {
@@ -143,4 +153,22 @@ class Image
 
         return $this;
     }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedOn(): DateTime
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * @param DateTime $createdOn
+     */
+    public function setCreatedOn(DateTime $createdOn): void
+    {
+        $this->createdOn = $createdOn;
+    }
+
+
 }

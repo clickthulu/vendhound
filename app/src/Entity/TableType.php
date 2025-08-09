@@ -33,11 +33,11 @@ class TableType
     private Collection $dealerships;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $created_on;
+    private DateTime $createdOn;
 
     public function __construct()
     {
-        $this->created_on = new DateTime();
+        $this->createdOn = new DateTime();
         $this->dealerships = new ArrayCollection();
     }
 
@@ -117,16 +117,16 @@ class TableType
      */
     public function getCreatedOn(): DateTime
     {
-        return $this->created_on;
+        return $this->createdOn;
     }
 
     /**
-     * @param DateTime $created_on
+     * @param DateTime $createdOn
      * @return TableType
      */
-    public function setCreatedOn(DateTime $created_on): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->created_on = $created_on;
+        $this->createdOn = $createdOn;
         return $this;
     }
 

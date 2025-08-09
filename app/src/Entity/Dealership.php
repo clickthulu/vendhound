@@ -42,7 +42,7 @@ class Dealership
     private Collection $notes;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private DateTime $created_on;
+    private DateTime $createdOn;
 
     /**
      * @var Collection<int, Image>
@@ -57,10 +57,10 @@ class Dealership
     private Collection $users;
 
     #[ORM\Column]
-    private ?bool $is_accepted = null;
+    private ?bool $isAccepted = null;
 
     #[ORM\Column]
-    private ?bool $is_paid = null;
+    private ?bool $isPaid = null;
 
     /**
      * @var Collection<int, Vote>
@@ -68,9 +68,13 @@ class Dealership
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voted_for')]
     private Collection $votes;
 
+    #[ORM\OneToOne(inversedBy: 'dealership', cascade: ['persist', 'remove'])]
+    private ?MailingAddress $MailAddress = null;
+
+
     public function __construct()
     {
-        $this->created_on = new DateTime();
+        $this->createdOn = new DateTime();
         $this->categories = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->images = new ArrayCollection();
@@ -190,15 +194,16 @@ class Dealership
      */
     public function getCreatedOn(): DateTime
     {
-        return $this->created_on;
+        return $this->createdOn;
     }
 
     /**
-     * @param DateTime $created_on
+     * @param DateTime $createdOn
+     * @return Dealership
      */
-    public function setCreatedOn(DateTime $created_on): static
+    public function setCreatedOn(DateTime $createdOn): static
     {
-        $this->created_on = $created_on;
+        $this->createdOn = $createdOn;
         return $this;
     }
 
@@ -244,7 +249,7 @@ class Dealership
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setAssocDealership($this);
+            $user->setDealership($this);
         }
 
         return $this;
@@ -254,8 +259,8 @@ class Dealership
     {
         if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($user->getAssocDealership() === $this) {
-                $user->setAssocDealership(null);
+            if ($user->getDealership() === $this) {
+                $user->setDealership(null);
             }
         }
 
@@ -264,24 +269,24 @@ class Dealership
 
     public function isAccepted(): ?bool
     {
-        return $this->is_accepted;
+        return $this->isAccepted;
     }
 
-    public function setIsAccepted(bool $is_accepted): static
+    public function setIsAccepted(bool $isAccepted): static
     {
-        $this->is_accepted = $is_accepted;
+        $this->isAccepted = $isAccepted;
 
         return $this;
     }
 
     public function isPaid(): ?bool
     {
-        return $this->is_paid;
+        return $this->isPaid;
     }
 
-    public function setIsPaid(bool $is_paid): static
+    public function setIsPaid(bool $isPaid): static
     {
-        $this->is_paid = $is_paid;
+        $this->isPaid = $isPaid;
 
         return $this;
     }
@@ -312,6 +317,48 @@ class Dealership
                 $vote->setVotedFor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MailingAddress>
+     */
+    public function getMailingAddresses(): Collection
+    {
+        return $this->mailingAddresses;
+    }
+
+    public function addMailingAddress(MailingAddress $mailingAddress): static
+    {
+        if (!$this->mailingAddresses->contains($mailingAddress)) {
+            $this->mailingAddresses->add($mailingAddress);
+            $mailingAddress->setDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMailingAddress(MailingAddress $mailingAddress): static
+    {
+        if ($this->mailingAddresses->removeElement($mailingAddress)) {
+            // set the owning side to null (unless already changed)
+            if ($mailingAddress->getDealership() === $this) {
+                $mailingAddress->setDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMailAddress(): ?MailingAddress
+    {
+        return $this->MailAddress;
+    }
+
+    public function setMailAddress(?MailingAddress $MailAddress): static
+    {
+        $this->MailAddress = $MailAddress;
 
         return $this;
     }
