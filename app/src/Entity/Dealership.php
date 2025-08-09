@@ -20,14 +20,34 @@ class Dealership
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+
+    #[ORM\Column(length: 255)]
+    private ?string $legalname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $phone = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $taxID = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $website = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $productsAndServices = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $rating = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $specialRequests = null;
+
     #[ORM\ManyToOne(inversedBy: 'dealerships')]
     private ?TableType $tableRequestType = null;
+
 
     /**
      * @var Collection<int, Category>
@@ -71,6 +91,15 @@ class Dealership
     #[ORM\OneToOne(inversedBy: 'dealership', cascade: ['persist', 'remove'])]
     private ?MailingAddress $MailAddress = null;
 
+    /**
+     * @var Collection<int, Table>
+     */
+    #[ORM\OneToMany(targetEntity: Table::class, mappedBy: 'dealership')]
+    private Collection $assignedTables;
+
+    #[ORM\ManyToOne]
+    private ?DealerArea $area = null;
+
 
     public function __construct()
     {
@@ -80,6 +109,7 @@ class Dealership
         $this->images = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->votes = new ArrayCollection();
+        $this->assignedTables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -359,6 +389,48 @@ class Dealership
     public function setMailAddress(?MailingAddress $MailAddress): static
     {
         $this->MailAddress = $MailAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Table>
+     */
+    public function getAssignedTables(): Collection
+    {
+        return $this->assignedTables;
+    }
+
+    public function addAssignedTable(Table $assignedTable): static
+    {
+        if (!$this->assignedTables->contains($assignedTable)) {
+            $this->assignedTables->add($assignedTable);
+            $assignedTable->setDealership($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedTable(Table $assignedTable): static
+    {
+        if ($this->assignedTables->removeElement($assignedTable)) {
+            // set the owning side to null (unless already changed)
+            if ($assignedTable->getDealership() === $this) {
+                $assignedTable->setDealership(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getArea(): ?DealerArea
+    {
+        return $this->area;
+    }
+
+    public function setArea(?DealerArea $area): static
+    {
+        $this->area = $area;
 
         return $this;
     }

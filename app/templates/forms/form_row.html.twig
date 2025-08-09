@@ -1,0 +1,11 @@
+{# templates/forms/form_row.html.twig #}
+{% block form_row %}
+<div class="row">{{ form_errors(form) }}</div>
+<div class="row mb-3">
+    {{ form_label(form) }}
+    <div class="col">
+        {{ form_widget(form) }}
+    </div>
+</div>
+
+{% endblock %}

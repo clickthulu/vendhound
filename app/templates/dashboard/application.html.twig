@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dealership Application{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Apply for a Table</h3>
+        </div>
+    </div>
+
+    {{ form_start(applicationForm) }}
+
+    {{ form_end(applicationForm) }}
+
+</div>
+{% endblock %}

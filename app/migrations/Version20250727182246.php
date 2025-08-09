@@ -56,7 +56,7 @@ final class Version20250727182246 extends AbstractMigration
         $this->addSql("INSERT INTO settings (setting, value, defaultvalue, modifiedon, type, help, display_name, sourceoptions) values ('server_url', null, null, NOW(), 'string', 'Server\'s URL', 'Server URL', null)");
         $this->addSql("INSERT INTO settings (setting, value, defaultvalue, modifiedon, type, help, display_name, sourceoptions) values ('debug_mode', '0', '0', NOW(), 'bool', 'Turn on debug features for testing', 'Debug Mode:', null)");
         $this->addSql("INSERT INTO settings (setting, value, defaultvalue, modifiedon, type, help, display_name, sourceoptions) values ('bug_tracking', null, null, NOW(), 'string', 'Location of a bug tracker/feature request site', 'Bug Tracking', null)");
-        $this->addSql("INSERT INTO settings (setting, value, defaultvalue, modifiedon, type, help, display_name, sourceoptions) values ('unit_of_measurement', 'cm', 'cm', NOW(), 'string', 'Default unit of measurement', 'Unit of Measurement', 'App\\\\Enumerations\\\\UnitOfMeasurement')");
+        $this->addSql("INSERT INTO settings (setting, value, defaultvalue, modifiedon, type, help, display_name, sourceoptions) values ('unit_of_measurement', 'cm', 'cm', NOW(), 'enumeration', 'Default unit of measurement', 'Unit of Measurement', 'App\\\\Enumerations\\\\UnitOfMeasurement')");
 
     }
 

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Delete All Dealerships{% endblock %}
+
+{% block body %}
+    <div class="block col p-3" id="">
+        <div class="row mb-3">
+            <div class="col">
+                <h3>Admin - Delete All Dealerships</h3>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-8 offset-2 text-center">
+                <h3>Are you absolutely sure?  This cannot be undone.</h3>
+                <a href="{{ url('app_admin_deleteallvendorsconfirm') }}" class="btn btn-large btn-danger"><h3>Yes I am Sure.  Delete Everything.</h3></a>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
