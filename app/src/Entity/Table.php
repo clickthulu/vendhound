@@ -43,6 +43,9 @@ class Table
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private DateTime $createdOn;
 
+    #[ORM\ManyToOne(inversedBy: 'assignedTables')]
+    private ?Dealership $dealership = null;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
@@ -170,6 +173,18 @@ class Table
     public function setCreatedOn(DateTime $createdOn): static
     {
         $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    public function getDealership(): ?Dealership
+    {
+        return $this->dealership;
+    }
+
+    public function setDealership(?Dealership $dealership): static
+    {
+        $this->dealership = $dealership;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enumerations\UserRole;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\LoginAuthenticator;
@@ -38,7 +39,7 @@ class RegistrationController extends AbstractController
 
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
+            $user->addRole(UserRole::ROLE_USER);
             $entityManager->persist($user);
             $entityManager->flush();
 

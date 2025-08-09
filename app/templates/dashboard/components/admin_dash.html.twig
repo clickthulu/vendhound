@@ -1,0 +1,45 @@
+<div class="block mb-3">
+    <div class="row">
+        <div class="col-8 offset-2">
+
+            <h3>Welcome Admin</h3>
+            <h4>Checklist</h4>
+            <p>The following items may need to be set up:</p>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><a href="{{ url('app_admin_dealerarea') }}">Dealer Areas</a></td>
+                        <td>
+                            {% if validated.dealerarea is not empty and validated.dealerarea == true %}
+                            <i class="fas fa-check text-success"></i> Ready
+                            {% else %}
+                            <i class="fas fa-close text-danger"></i> Needs work
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="{{ url('app_admin_tabletype') }}">Table Types</a></td>
+                        <td>
+                            {% if validated.tabletype is not empty and validated.tabletype == true %}
+                                <i class="fas fa-check text-success"></i> Ready
+                            {% else %}
+                                <i class="fas fa-close text-danger"></i> Needs work
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a href="{{ url('app_admin_category') }}">Categories</a></td>
+                        <td>
+                            {% if validated.category is not empty and validated.category == true %}
+                                <i class="fas fa-check text-success"></i> Ready
+                            {% else %}
+                                <i class="fas fa-close text-danger"></i> Needs work
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

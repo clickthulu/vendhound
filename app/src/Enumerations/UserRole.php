@@ -4,24 +4,33 @@ namespace App\Enumerations;
 
 class UserRole implements OptionEnumerationInterface
 {
-    const USER_DEV = 'Developer of the VendHound code';
-    const USER_ADMIN = 'Administrator of the vending area';
-    const USER_CURATOR = 'Curator: A staff member who can vote on applications';
-    const USER_APPLNT = 'Applicant: The person submitting the application for a dealership';
-    const USER_DEAL = 'Dealer: The primary point of contact for an approved dealership';
-    const USER_ASST = 'Assistant: A secondary point of contact associated with an approved dealership';
-    const USER_ATTND = 'Attendee: View-only access for the listings directory and search functionality';
+    const DESC_DEVELOPER = 'Developer of the VendHound code';
+    const DESC_ADMIN = 'Administrator of the vending area';
+    const DESC_CURATOR = 'Curator: A staff member who can vote on applications';
+    const DESC_DEALER = 'Dealer: The primary point of contact for an approved dealership';
+//    const DESC_APPLICANT = 'Applicant: The person submitting the application for a dealership';
+    const DESC_ASSISTANT = 'Assistant: A secondary point of contact associated with an approved dealership';
+    const DESC_USER = 'Attendee: View-only access for the listings directory and search functionality';
+
+    const ROLE_DEVELOPER = "ROLE_DEVELOPER";
+    const ROLE_ADMIN = "ROLE_ADMIN";
+    const ROLE_CURATOR = "ROLE_CURATOR";
+    const ROLE_DEALER = "ROLE_DEALER";
+//    const ROLE_APPLICANT = "ROLE_APPLICANT";
+    const ROLE_ASSISTANT = "ROLE_ASSISTANT";
+    const ROLE_USER = "ROLE_USER";
+
 
 public function toArray(): array
     {
         return [
-            self::USER_DEV=> self::USER_DEV,
-            self::USER_ADMIN => self::USER_ADMIN,
-            self::USER_CURATOR => self::USER_CURATOR,
-            self::USER_APPLNT => self::USER_APPLNT,
-            self::USER_DEAL => self::USER_DEAL,
-            self::USER_ASST => self::USER_ASST,
-            self::USER_ATTND => self::USER_ATTND
+            self::DESC_DEVELOPER => self::ROLE_DEVELOPER,
+            self::DESC_ADMIN => self::ROLE_ADMIN,
+            self::DESC_CURATOR => self::ROLE_CURATOR,
+            self::DESC_DEALER => self::ROLE_DEALER,
+//            self::DESC_APPLICANT => self::ROLE_APPLICANT,
+            self::DESC_ASSISTANT => self::ROLE_ASSISTANT,
+            self::DESC_USER => self::ROLE_USER
         ];
     }
 
