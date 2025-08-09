@@ -58,6 +58,20 @@ class TableTypeForm extends AbstractType
                     ]
                 ]
             )
+            ->add(
+                'num_user_slots',
+                NumberType::class,
+                [
+                    'attr' => [
+                        'class' => 'form-control',
+                        'required' => true
+                    ],
+                    'label' => 'Number of seats:',
+                    'label_attr' => [
+                        'class' => 'form-label col-3 text-end fw-bold'
+                    ]
+                ]
+            )
         ;
     }
 
