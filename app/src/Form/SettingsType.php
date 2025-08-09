@@ -25,13 +25,7 @@ class SettingsType extends AbstractType
                 'class' => 'col'
             ]
         ])
-        ->add(
-            'submit', SubmitType::class, [
-                "attr" => [
-                    "class" => 'btn btn-success'
-                ],
-            ]
-        )
+
 
         ;
 

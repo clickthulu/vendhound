@@ -27,7 +27,7 @@ class SettingsController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }

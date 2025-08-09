@@ -3,6 +3,8 @@ twig:
     globals:
         app_env: '%app.environment%'
         settings: '@App\Service\SettingsService'
+    form_themes:
+        - 'forms/form_row.html.twig'
 when@test:
     twig:
         strict_variables: true

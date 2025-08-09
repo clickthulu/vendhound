@@ -26,7 +26,7 @@ class DeveloperController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         $this->addFlash('warning', 'WARNING This will only work in developer mode');
         $this->addFlash('danger', 'ERROR This will only work in developer mode');
 
-        return $this->render('dashboard/no-page.html.twig');
+        return new RedirectResponse($this->generateUrl('app_dashboard'));
     }
 
     #[Route('/developer/promoteToAdmin', name: 'app_developer_promoteme')]

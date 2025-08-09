@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Dealer Areas{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Admin - Dealer Areas</h3>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-8 offset-2">
+            <p>Dealer Areas divide your vendor room into different specific sections.  You may have a large general room, but something more specific for large vendors or small artists.  Or even separate physical spaces.  This allows you to define those spaces so that your applicants can specify where they're looking to set up shop.</p>
+            <p>You must have at least one area defined.</p>
+        </div>
+    </div>
+    {{ form_start(dealerareaForm)}}
+    <div class="row mb-3">
+        <div class="col-8 offset-2">
+            <div class="row">
+                {{ form_label(dealerareaForm.name) }}
+                <div class="col input-group">
+                    {{ form_widget(dealerareaForm.name) }}
+                    <input type="submit" class="btn btn-primary" value="Add " />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(dealerareaForm) }}
+
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            {% if dealerareas|length > 0 %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Dealer Area</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for area in dealerareas %}
+                    <tr>
+                        <td class="col-1">{{ loop.index0 +1 }}</td>
+                        <td class="col">{{ area.name }}</td>
+                        <td class="col-1 text-end">
+                            <a href="{{ url('app_admin_dealerareadelete', { id: area.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            {% else %}
+                <p>Dealer areas have not been set up</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

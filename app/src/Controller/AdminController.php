@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\DealerArea;
+use App\Entity\Dealership;
 use App\Entity\TableType;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Form\CategoryTypeForm;
+use App\Form\DealerAreaType;
 use App\Form\TableTypeForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -26,7 +29,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
-#[Route('/admin/category', name: 'app_admin_category')]
+    #[Route('/admin/category', name: 'app_admin_category')]
     public function categories(Request $request, EntityManagerInterface $entityManager): Response
     {
 
@@ -35,7 +38,7 @@ final class AdminController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
@@ -71,7 +74,7 @@ final class AdminController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
@@ -87,7 +90,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/admin/table-type', name: 'app_admin_tabletype')]
-    public function listTableType(Request $request , EntityManagerInterface $entityManager): Response
+    public function listTableType(Request $request, EntityManagerInterface $entityManager): Response
     {
         $tableTypes = $entityManager->getRepository(TableType::class)->findBy([], ['name' => 'ASC']);
 
@@ -99,14 +102,14 @@ final class AdminController extends AbstractController
 
     #[Route('/admin/table-type/edit/{id}', name: 'app_admin_tabletypeedit')]
     #[Route('/admin/table-type/create', name: 'app_admin_tabletypecreate')]
-    public function defineTableType(Request $request , EntityManagerInterface $entityManager, ?int $id = null): Response
+    public function defineTableType(Request $request, EntityManagerInterface $entityManager, ?int $id = null): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /**
          * @var User $user
          */
         $user = $this->getUser();
-        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
@@ -127,7 +130,7 @@ final class AdminController extends AbstractController
                 $this->addFlash('info', "Table type {$tableType->getName()} has been {$action}");
                 return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
             }
-        } catch (Exception $e){
+        } catch (Exception $e) {
             $err = new FormError($e->getMessage());
             $form->addError($err);
         }
@@ -138,6 +141,7 @@ final class AdminController extends AbstractController
             ]
         );
     }
+
     #[Route('/admin/table-type/delete/{id}', name: 'app_admin_tabletypedelete')]
     public function deleteTableType(EntityManagerInterface $entityManager, string $id): RedirectResponse
     {
@@ -146,7 +150,7 @@ final class AdminController extends AbstractController
          * @var User $user
          */
         $user = $this->getUser();
-        if (!in_array("ROLE_OWNER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
@@ -158,6 +162,104 @@ final class AdminController extends AbstractController
 
         $entityManager->remove($tableType);
         $entityManager->flush();
-        return new RedirectResponse($this->generateUrl('define-table-type'));
+        return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
     }
+
+    #[Route('/admin/dealer-area', name: 'app_admin_dealerarea')]
+    public function listDealerArea(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        $area = new DealerArea();
+        $form = $this->createForm(DealerAreaType::class, $area);
+        $form->handleRequest($request);
+
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($area);
+                $entityManager->flush();
+                $this->addFlash('info', "{$area->getName()} added as a new area");
+                return new RedirectResponse($this->generateUrl('app_admin_dealerarea'));
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('danger', "An error has occured: {$e->getMessage()}");
+        }
+
+        $dealerAreas = $entityManager->getRepository(DealerArea::class)->findBy([], ['name' => 'ASC']);
+
+        return $this->render('admin/dealer-area.html.twig', [
+            'dealerareas' => $dealerAreas,
+            'dealerareaForm' => $form->createView()
+        ]);
+
+    }
+
+    #[Route('/admin/dealer-area/delete/{id}', name: 'app_admin_dealerareadelete')]
+    public function deleteDealerArea(EntityManagerInterface $entityManager, string $id): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        /**
+         * @var DealerArea $area
+         */
+        $area = $entityManager->getRepository(DealerArea::class)->find($id);
+
+        $entityManager->remove($area);
+        $entityManager->flush();
+        return new RedirectResponse($this->generateUrl('app_admin_dealerarea'));
+    }
+
+
+
+    #[Route('/admin/dealership/deleteall', name: 'app_admin_deleteallvendors')]
+    public function deleteAllDealerships(EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        return $this->render("admin//dealer-delete-all.html.twig");
+    }
+
+    #[Route('/admin/dealership/deleteall/confirm', name: 'app_admin_deleteallvendorsconfirm')]
+    public function deleteAllDealershipsConfirm(EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+        $dql = "DELETE FROM App\Entity\Dealership";
+        $query = $entityManager->createQuery($dql);
+        $deleted = $query->execute();
+        $this->addFlash("warning", "{$deleted} dealerships have been removed from the table.");
+        return new RedirectResponse($this->generateUrl('app_dashboard'));
+    }
+
 }
