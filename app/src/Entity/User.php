@@ -73,12 +73,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: VoteEvent::class, mappedBy: 'added_by')]
     private Collection $voteEvents;
 
+    /**
+     * @var Collection<int, MailingAddress>
+     */
+    #[ORM\OneToMany(targetEntity: MailingAddress::class, mappedBy: 'user_id')]
+    private Collection $mailingAddresses;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->images = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->voteEvents = new ArrayCollection();
+        $this->mailingAddresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -336,6 +343,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($voteEvent->getAddedBy() === $this) {
                 $voteEvent->setAddedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MailingAddress>
+     */
+    public function getMailingAddresses(): Collection
+    {
+        return $this->mailingAddresses;
+    }
+
+    public function addMailingAddress(MailingAddress $mailingAddress): static
+    {
+        if (!$this->mailingAddresses->contains($mailingAddress)) {
+            $this->mailingAddresses->add($mailingAddress);
+            $mailingAddress->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMailingAddress(MailingAddress $mailingAddress): static
+    {
+        if ($this->mailingAddresses->removeElement($mailingAddress)) {
+            // set the owning side to null (unless already changed)
+            if ($mailingAddress->getUserId() === $this) {
+                $mailingAddress->setUserId(null);
             }
         }
 
