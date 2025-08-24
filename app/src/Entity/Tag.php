@@ -29,10 +29,17 @@ class Tag
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private DateTime $createdOn;
 
+    /**
+     * @var Collection<int, VoteEvent>
+     */
+    #[ORM\ManyToMany(targetEntity: VoteEvent::class, mappedBy: 'filterByTag')]
+    private Collection $voteEvents;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->tables = new ArrayCollection();
+        $this->voteEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,6 +94,33 @@ class Tag
     public function setCreatedOn(DateTime $createdOn): static
     {
         $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoteEvent>
+     */
+    public function getVoteEvents(): Collection
+    {
+        return $this->voteEvents;
+    }
+
+    public function addVoteEvent(VoteEvent $voteEvent): static
+    {
+        if (!$this->voteEvents->contains($voteEvent)) {
+            $this->voteEvents->add($voteEvent);
+            $voteEvent->addFilterByTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteEvent(VoteEvent $voteEvent): static
+    {
+        if ($this->voteEvents->removeElement($voteEvent)) {
+            $voteEvent->removeFilterByTag($this);
+        }
 
         return $this;
     }
