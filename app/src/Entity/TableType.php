@@ -38,10 +38,17 @@ class TableType
     #[ORM\Column]
     private ?int $num_user_slots = 1;
 
+    /**
+     * @var Collection<int, VoteEvent>
+     */
+    #[ORM\ManyToMany(targetEntity: VoteEvent::class, mappedBy: 'filterByTableType')]
+    private Collection $voteEvents;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->dealerships = new ArrayCollection();
+        $this->voteEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +148,33 @@ class TableType
     public function setNumUserSlots(int $num_user_slots): static
     {
         $this->num_user_slots = $num_user_slots;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VoteEvent>
+     */
+    public function getVoteEvents(): Collection
+    {
+        return $this->voteEvents;
+    }
+
+    public function addVoteEvent(VoteEvent $voteEvent): static
+    {
+        if (!$this->voteEvents->contains($voteEvent)) {
+            $this->voteEvents->add($voteEvent);
+            $voteEvent->addFilterByTableType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteEvent(VoteEvent $voteEvent): static
+    {
+        if ($this->voteEvents->removeElement($voteEvent)) {
+            $voteEvent->removeFilterByTableType($this);
+        }
 
         return $this;
     }

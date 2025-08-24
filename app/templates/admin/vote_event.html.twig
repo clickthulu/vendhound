@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Vote Events{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Vote Events</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-1">#</th>
+                    <th>Vote Event</th>
+                    <th class="col-2 text-end"><a href="{{ url('app_admin_vote_event_create') }}" class="btn btn-primary">Create</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in voteEvents %}
+                    <tr>
+                        <td class="col-1">{{ loop.index0 +1 }}</td>
+                        <td class="col">{{ event.id }} ( from {{ event.startTime }} to {{ event.endTime }} with filters: {{event.getFilterByArea}}{{event.getFilterByTableType}}{{event.getFilterByTag}} )</td>
+                        <td class="btn-group">
+                            <a href="{{ url('app_admin_vote_event_edit', { id: event.id }) }}" class="btn btn-small btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url('app_admin_vote_event_delete', { id: event.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

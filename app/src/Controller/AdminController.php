@@ -262,4 +262,80 @@ final class AdminController extends AbstractController
         return new RedirectResponse($this->generateUrl('app_dashboard'));
     }
 
+    #[Route('/admin/vote_event', name: 'app_admin_vote_event')]
+        public function listVoteEvent(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $voteEvents = $entityManager->getRepository(VoteEvent::class)->findBy([], ['name' => 'ASC']);
+
+            return $this->render('admin/vote_event.html.twig', [
+                'voteEvents' => $voteEvents
+            ]);
+
+        }
+
+        #[Route('/admin/vote_event/edit/{id}', name: 'app_admin_vote_event_edit')]
+        #[Route('/admin/vote_event/create', name: 'app_admin_vote_event_create')]
+        public function defineVoteEvent(Request $request, EntityManagerInterface $entityManager, ?int $id = null): Response
+        {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+            /**
+             * @var User $user
+             */
+            $user = $this->getUser();
+            if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+                $this->addFlash('error', 'You do not have permission to perform this action');
+                return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+            }
+            $voteEvent = new VoteEvent();
+            $action = 'created';
+
+            if (!empty($id)) {
+                $voteEvent = $entityManager->getRepository(VoteEvent::class)->find($id);
+                $action = 'updated';
+            }
+
+            $form = $this->createForm(VoteEventFormType::class, $voteEvent);
+            $form->handleRequest($request);
+            try {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $entityManager->persist($voteEvent);
+                    $entityManager->flush();
+                    $this->addFlash('info', "Vote event {$voteEvent->getId()} has been {$action}");
+                    return new RedirectResponse($this->generateUrl('app_admin_vote_event'));
+                }
+            } catch (Exception $e) {
+                $err = new FormError($e->getMessage());
+                $form->addError($err);
+            }
+            return $this->render(
+                'admin/define_vote_event.html.twig',
+                [
+                    'VoteEventFormType' => $form->createView(),
+                ]
+            );
+        }
+
+        #[Route('/admin/vote_event/delete/{id}', name: 'app_admin_vote_event_delete')]
+        public function deleteVoteEvent(EntityManagerInterface $entityManager, string $id): RedirectResponse
+        {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+            /**
+             * @var User $user
+             */
+            $user = $this->getUser();
+            if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+                $this->addFlash('error', 'You do not have permission to perform this action');
+                return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+            }
+
+            /**
+             * @var VoteEvent $voteEvent
+             */
+            $voteEvent = $entityManager->getRepository(VoteEvent::class)->find($id);
+
+            $entityManager->remove($voteEvent);
+            $entityManager->flush();
+            return new RedirectResponse($this->generateUrl('app_admin_vote_event'));
+        }
+
 }

@@ -41,10 +41,37 @@ class VoteEvent
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'event_id', orphanRemoval: true)]
     private Collection $votes;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $maxCuratorVotesPerApplicant = null;
+
+    /**
+     * @var Collection<int, DealerArea>
+     */
+    #[ORM\ManyToMany(targetEntity: DealerArea::class, inversedBy: 'voteEvents')]
+    private Collection $filterByArea;
+
+    /**
+     * @var Collection<int, TableType>
+     */
+    #[ORM\ManyToMany(targetEntity: TableType::class, inversedBy: 'voteEvents')]
+    private Collection $filterByTableType;
+
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'voteEvents')]
+    private Collection $filterByTag;
+
+    #[ORM\Column(length: 10000, nullable: true)]
+    private ?string $sqlQuery = null;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->votes = new ArrayCollection();
+        $this->filterByArea = new ArrayCollection();
+        $this->filterByTableType = new ArrayCollection();
+        $this->filterByTag = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,6 +183,102 @@ class VoteEvent
     public function setCreatedOn(DateTime $createdOn): void
     {
         $this->createdOn = $createdOn;
+    }
+
+    public function getMaxCuratorVotesPerApplicant(): ?int
+    {
+        return $this->maxCuratorVotesPerApplicant;
+    }
+
+    public function setMaxCuratorVotesPerApplicant(?int $maxCuratorVotesPerApplicant): static
+    {
+        $this->maxCuratorVotesPerApplicant = $maxCuratorVotesPerApplicant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DealerArea>
+     */
+    public function getFilterByArea(): Collection
+    {
+        return $this->filterByArea;
+    }
+
+    public function addFilterByArea(DealerArea $filterByArea): static
+    {
+        if (!$this->filterByArea->contains($filterByArea)) {
+            $this->filterByArea->add($filterByArea);
+        }
+
+        return $this;
+    }
+
+    public function removeFilterByArea(DealerArea $filterByArea): static
+    {
+        $this->filterByArea->removeElement($filterByArea);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TableType>
+     */
+    public function getFilterByTableType(): Collection
+    {
+        return $this->filterByTableType;
+    }
+
+    public function addFilterByTableType(TableType $filterByTableType): static
+    {
+        if (!$this->filterByTableType->contains($filterByTableType)) {
+            $this->filterByTableType->add($filterByTableType);
+        }
+
+        return $this;
+    }
+
+    public function removeFilterByTableType(TableType $filterByTableType): static
+    {
+        $this->filterByTableType->removeElement($filterByTableType);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getFilterByTag(): Collection
+    {
+        return $this->filterByTag;
+    }
+
+    public function addFilterByTag(Tag $filterByTag): static
+    {
+        if (!$this->filterByTag->contains($filterByTag)) {
+            $this->filterByTag->add($filterByTag);
+        }
+
+        return $this;
+    }
+
+    public function removeFilterByTag(Tag $filterByTag): static
+    {
+        $this->filterByTag->removeElement($filterByTag);
+
+        return $this;
+    }
+
+    public function getSqlQuery(): ?string
+    {
+        return $this->sqlQuery;
+    }
+
+    public function setSqlQuery(?string $sqlQuery): static
+    {
+        $this->sqlQuery = $sqlQuery;
+
+        return $this;
     }
 
 

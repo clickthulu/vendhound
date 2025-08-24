@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Enumerations\AddressType;
 use App\Repository\MailingAddressRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MailingAddressRepository::class)]
@@ -36,6 +38,12 @@ class MailingAddress
 
     #[ORM\OneToOne(mappedBy: 'MailAddress', cascade: ['persist', 'remove'])]
     private ?Dealership $dealership = null;
+
+    #[ORM\ManyToOne(inversedBy: 'mailingAddresses')]
+    private ?User $user_id = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, enumType: AddressType::class)]
+    private array $address_type = [];
 
 
     public function getId(): ?int
@@ -145,6 +153,33 @@ class MailingAddress
         }
 
         $this->dealership = $dealership;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): static
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    /**
+     * @return AddressType[]
+     */
+    public function getAddressType(): array
+    {
+        return $this->address_type;
+    }
+
+    public function setAddressType(array $address_type): static
+    {
+        $this->address_type = $address_type;
 
         return $this;
     }
