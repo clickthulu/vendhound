@@ -28,6 +28,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td><a href="{{ url('app_admin_tableaddon') }}">Table Addons</a></td>
+                        <td>
+                            {% if validated.tableaddon is not empty and validated.tableaddon == true %}
+                                <i class="fas fa-check text-success"></i> Ready
+                            {% else %}
+                                <i class="fas fa-close text-danger"></i> Needs work
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
                         <td><a href="{{ url('app_admin_category') }}">Categories</a></td>
                         <td>
                             {% if validated.category is not empty and validated.category == true %}

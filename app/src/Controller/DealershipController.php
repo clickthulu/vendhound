@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Dealership;
+use App\Entity\MailingAddress;
 use App\Entity\User;
 use App\Form\ApplicationType;
 use App\Form\DealershipType;
+use App\Form\MailingAddressType;
 use App\Form\TableTypeForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -28,9 +30,13 @@ class DealershipController extends AbstractController
         $user = $this->getUser();
 
         $dealership = new Dealership();
+
+        $dealership->setOwner($user)->setBusinessEmail($user->getEmail());
         // here's where we build a dealership application form
         $form = $this->createForm(ApplicationType::class, $dealership);
         $form->handleRequest($request);
+
+        $mailaddressform = $this->createForm(MailingAddressType::class, null);
 
         try {
             if ($form->isSubmitted() && $form->isValid()) {
@@ -46,6 +52,7 @@ class DealershipController extends AbstractController
             'dashboard/application.html.twig',
             [
                 'applicationForm' => $form->createView(),
+                'mailaddressForm' => $mailaddressform->createView()
             ]
         );
 

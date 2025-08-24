@@ -3,11 +3,13 @@
 namespace App\Controller;
 use App\Entity\DealerArea;
 use App\Entity\Dealership;
+use App\Entity\TableAddOn;
 use App\Entity\TableType;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Form\CategoryTypeForm;
 use App\Form\DealerAreaType;
+use App\Form\TableAddOnType;
 use App\Form\TableTypeForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -164,6 +166,84 @@ final class AdminController extends AbstractController
         $entityManager->flush();
         return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
     }
+
+    #[Route('/admin/table-addon', name: 'app_admin_tableaddon')]
+    public function listTableAddon(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $tableAddons = $entityManager->getRepository(TableAddOn::class)->findBy([], ['name' => 'ASC']);
+
+        return $this->render('admin/table-addon.html.twig', [
+            'tableAddons' => $tableAddons
+        ]);
+
+    }
+
+
+    #[Route('/admin/table-addon/edit/{id}', name: 'app_admin_tableaddonedit')]
+    #[Route('/admin/table-addon/create', name: 'app_admin_tableaddoncreate')]
+    public function defineTableAddon(Request $request, EntityManagerInterface $entityManager, ?int $id = null): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+        $tableAddon = new TableAddOn();
+        $action = 'created';
+
+        if (!empty($id)) {
+            $tableAddon = $entityManager->getRepository(TableAddOn::class)->find($id);
+            $action = 'updated';
+        }
+
+        $form = $this->createForm(TableAddOnType::class, $tableAddon);
+        $form->handleRequest($request);
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($tableAddon);
+                $entityManager->flush();
+                $this->addFlash('info', "Table addon {$tableAddon->getName()} has been {$action}");
+                return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
+            }
+        } catch (Exception $e) {
+            $err = new FormError($e->getMessage());
+            $form->addError($err);
+        }
+        return $this->render(
+            'admin/define-table-addon.html.twig',
+            [
+                'tableAddonForm' => $form->createView(),
+            ]
+        );
+    }
+
+    #[Route('/admin/table-addon/delete/{id}', name: 'app_admin_tableaddondelete')]
+    public function deleteTableAddon(EntityManagerInterface $entityManager, string $id): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        /**
+         * @var TableType $tableAddon
+         */
+        $tableAddon = $entityManager->getRepository(TableType::class)->find($id);
+
+        $entityManager->remove($tableAddon);
+        $entityManager->flush();
+        return new RedirectResponse($this->generateUrl('app_admin_tableaddon'));
+    }
+
 
     #[Route('/admin/dealer-area', name: 'app_admin_dealerarea')]
     public function listDealerArea(Request $request, EntityManagerInterface $entityManager): Response

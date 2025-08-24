@@ -37,6 +37,13 @@ class MailingAddress
     #[ORM\OneToOne(mappedBy: 'MailAddress', cascade: ['persist', 'remove'])]
     private ?Dealership $dealership = null;
 
+    #[ORM\ManyToOne(inversedBy: 'mailingAddresses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $nickname = null;
+
 
     public function getId(): ?int
     {
@@ -149,5 +156,38 @@ class MailingAddress
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getNickname(): ?string
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname(string $nickname): static
+    {
+        $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function load(array $data): static
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
+        return $this;
+    }
 
 }

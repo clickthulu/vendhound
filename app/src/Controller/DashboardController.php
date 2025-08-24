@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\DealerArea;
+use App\Entity\TableAddOn;
 use App\Entity\TableType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,6 +39,7 @@ final class DashboardController extends AbstractController
 
         return [
             'tabletype' => $entityManager->getRepository(TableType::class)->count() > 0,
+            'tableaddon' => $entityManager->getRepository(TableAddOn::class)->count() > 0,
             'dealerarea' => $entityManager->getRepository(DealerArea::class)->count() > 0,
             'category' => $entityManager->getRepository(Category::class)->count() > 0,
         ];
