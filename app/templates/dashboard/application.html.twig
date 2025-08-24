@@ -5,14 +5,33 @@
 {% block body %}
 <div class="block col p-3" id="">
     <div class="row mb-3">
-        <div class="col">
-            <h3>Apply for a Table</h3>
+        <div class="col-8 offset-2">
+
+            <div class="row mb-3">
+                <div class="col">
+                    <h3>Apply for a Table</h3>
+                </div>
+            </div>
+
+            {{ form_start(applicationForm) }}
+            {{ form_row(applicationForm.name) }}
+            {{ form_row(applicationForm.businessEmail) }}
+            {{ form_row(applicationForm.businessPhone) }}
+            <div class="row mb-3">
+                {{ form_label(applicationForm.MailAddress) }}
+                <div class="col">
+                    {{ form_widget(applicationForm.MailAddress) }}
+                </div>
+                <div class="col-3">
+                    <button aria-controls="offcanvas_mailaddress" data-bs-target="#offcanvas_mailaddress" class="btn btn-sm btn-primary" data-bs-toggle="offcanvas"><i class="fas fa-square-plus"></i> Add Address</button>
+                </div>
+
+            </div>
+            {{ form_end(applicationForm) }}
+
         </div>
     </div>
-
-    {{ form_start(applicationForm) }}
-
-    {{ form_end(applicationForm) }}
-
 </div>
+
+{% include "dashboard/components/mailaddress_flyout.html.twig" %}
 {% endblock %}

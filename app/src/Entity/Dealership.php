@@ -88,7 +88,7 @@ class Dealership
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'voted_for')]
     private Collection $votes;
 
-    #[ORM\OneToOne(inversedBy: 'dealership', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'dealership')]
     private ?MailingAddress $MailAddress = null;
 
     /**
@@ -99,6 +99,28 @@ class Dealership
 
     #[ORM\ManyToOne]
     private ?DealerArea $area = null;
+
+    #[ORM\OneToOne(inversedBy: 'mainDealership', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $businessEmail = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $businessPhone = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\ManyToOne(inversedBy: 'dealershipsSecond')]
+    private ?TableType $tableRequestTypeSecond = null;
+
+    #[ORM\ManyToOne(inversedBy: 'dealershipsThree')]
+    private ?TableType $tableRequestTypeThree = null;
+
+    #[ORM\ManyToOne(inversedBy: 'dealerships')]
+    private ?TableAddOn $TableAddOn = null;
 
 
     public function __construct()
@@ -351,36 +373,6 @@ class Dealership
         return $this;
     }
 
-    /**
-     * @return Collection<int, MailingAddress>
-     */
-    public function getMailingAddresses(): Collection
-    {
-        return $this->mailingAddresses;
-    }
-
-    public function addMailingAddress(MailingAddress $mailingAddress): static
-    {
-        if (!$this->mailingAddresses->contains($mailingAddress)) {
-            $this->mailingAddresses->add($mailingAddress);
-            $mailingAddress->setDealership($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMailingAddress(MailingAddress $mailingAddress): static
-    {
-        if ($this->mailingAddresses->removeElement($mailingAddress)) {
-            // set the owning side to null (unless already changed)
-            if ($mailingAddress->getDealership() === $this) {
-                $mailingAddress->setDealership(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getMailAddress(): ?MailingAddress
     {
         return $this->MailAddress;
@@ -431,6 +423,186 @@ class Dealership
     public function setArea(?DealerArea $area): static
     {
         $this->area = $area;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getBusinessEmail(): ?string
+    {
+        return $this->businessEmail;
+    }
+
+    public function setBusinessEmail(?string $businessEmail): static
+    {
+        $this->businessEmail = $businessEmail;
+
+        return $this;
+    }
+
+    public function getBusinessPhone(): ?string
+    {
+        return $this->businessPhone;
+    }
+
+    public function setBusinessPhone(?string $businessPhone): static
+    {
+        $this->businessPhone = $businessPhone;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLegalname(): ?string
+    {
+        return $this->legalname;
+    }
+
+    /**
+     * @param string|null $legalname
+     */
+    public function setLegalname(?string $legalname): void
+    {
+        $this->legalname = $legalname;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getWebsite(): ?string
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string|null $website
+     */
+    public function setWebsite(?string $website): void
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRating(): ?string
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param string|null $rating
+     */
+    public function setRating(?string $rating): void
+    {
+        $this->rating = $rating;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSpecialRequests(): ?string
+    {
+        return $this->specialRequests;
+    }
+
+    /**
+     * @param string|null $specialRequests
+     */
+    public function setSpecialRequests(?string $specialRequests): void
+    {
+        $this->specialRequests = $specialRequests;
+    }
+
+    public function getTableRequestTypeSecond(): ?TableType
+    {
+        return $this->tableRequestTypeSecond;
+    }
+
+    public function setTableRequestTypeSecond(?TableType $tableRequestTypeSecond): static
+    {
+        $this->tableRequestTypeSecond = $tableRequestTypeSecond;
+
+        return $this;
+    }
+
+    public function getTableRequestTypeThree(): ?TableType
+    {
+        return $this->tableRequestTypeThree;
+    }
+
+    public function setTableRequestTypeThree(?TableType $tableRequestTypeThree): static
+    {
+        $this->tableRequestTypeThree = $tableRequestTypeThree;
+
+        return $this;
+    }
+
+    public function getTableAddOn(): ?TableAddOn
+    {
+        return $this->TableAddOn;
+    }
+
+    public function setTableAddOn(?TableAddOn $TableAddOn): static
+    {
+        $this->TableAddOn = $TableAddOn;
 
         return $this;
     }

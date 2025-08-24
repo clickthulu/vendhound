@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create/Update Table Addons{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Create / Update Table Addon</h3>
+        </div>
+    </div>
+    {{ form_start(tableAddonForm)}}
+    {{ form_row(tableAddonForm.name) }}
+    {{ form_row(tableAddonForm.description) }}
+    {{ form_row(tableAddonForm.additionalCost) }}
+    <div class="row mb-3">
+        <div class="col offset-3">
+            <input type="submit" class="btn btn-primary" value="Save Table Type " />
+        </div>
+    </div>
+    {{ form_end(tableAddonForm) }}
+
+</div>
+{% endblock %}

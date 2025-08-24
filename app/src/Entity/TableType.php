@@ -38,10 +38,24 @@ class TableType
     #[ORM\Column]
     private ?int $num_user_slots = 1;
 
+    /**
+     * @var Collection<int, Dealership>
+     */
+    #[ORM\OneToMany(targetEntity: Dealership::class, mappedBy: 'tableRequestTypeSecond')]
+    private Collection $dealershipsSecond;
+
+    /**
+     * @var Collection<int, Dealership>
+     */
+    #[ORM\OneToMany(targetEntity: Dealership::class, mappedBy: 'tableRequestTypeThree')]
+    private Collection $dealershipsThree;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->dealerships = new ArrayCollection();
+        $this->dealershipsSecond = new ArrayCollection();
+        $this->dealershipsThree = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +155,66 @@ class TableType
     public function setNumUserSlots(int $num_user_slots): static
     {
         $this->num_user_slots = $num_user_slots;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dealership>
+     */
+    public function getDealershipsSecond(): Collection
+    {
+        return $this->dealershipsSecond;
+    }
+
+    public function addDealershipsSecond(Dealership $dealershipsSecond): static
+    {
+        if (!$this->dealershipsSecond->contains($dealershipsSecond)) {
+            $this->dealershipsSecond->add($dealershipsSecond);
+            $dealershipsSecond->setTableRequestTypeSecond($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDealershipsSecond(Dealership $dealershipsSecond): static
+    {
+        if ($this->dealershipsSecond->removeElement($dealershipsSecond)) {
+            // set the owning side to null (unless already changed)
+            if ($dealershipsSecond->getTableRequestTypeSecond() === $this) {
+                $dealershipsSecond->setTableRequestTypeSecond(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dealership>
+     */
+    public function getDealershipsThree(): Collection
+    {
+        return $this->dealershipsThree;
+    }
+
+    public function addDealershipsThree(Dealership $dealershipsThree): static
+    {
+        if (!$this->dealershipsThree->contains($dealershipsThree)) {
+            $this->dealershipsThree->add($dealershipsThree);
+            $dealershipsThree->setTableRequestTypeThree($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDealershipsThree(Dealership $dealershipsThree): static
+    {
+        if ($this->dealershipsThree->removeElement($dealershipsThree)) {
+            // set the owning side to null (unless already changed)
+            if ($dealershipsThree->getTableRequestTypeThree() === $this) {
+                $dealershipsThree->setTableRequestTypeThree(null);
+            }
+        }
 
         return $this;
     }
