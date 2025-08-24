@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create/Update Vote Events{% endblock %}
+
+{% block body %}
+<div class="block col p-3" id="">
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Create / Update Vote Event</h3>
+        </div>
+    </div>
+    {{ form_start(VoteEventFormType)}}
+    <div class="row mb-3">
+        {{ form_label(VoteEventFormType.votesPerCurator) }}
+        <div class="col">
+            {{ form_widget(VoteEventFormType.votesPerCurator) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        {{ form_label(VoteEventFormType.maxCuratorVotesPerApplicant) }}
+        <div class="col">
+            {{ form_widget(VoteEventFormType.maxCuratorVotesPerApplicant) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        {{ form_label(VoteEventFormType.startTime) }}
+        <div class="col">
+            {{ form_widget(VoteEventFormType.startTime) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        {{ form_label(VoteEventFormType.startTime) }}
+        <div class="col">
+            {{ form_widget(VoteEventFormType.startTime) }}
+        </div>
+    </div>
+    <div class="row mb-3">
+            {{ form_label(VoteEventFormType.endTime) }}
+            <div class="col">
+                {{ form_widget(VoteEventFormType.endTime) }}
+            </div>
+        </div>
+    <div class="row mb-3">
+            {{ form_label(VoteEventFormType.filterByArea) }}
+            <div class="col">
+                {{ form_widget(VoteEventFormType.filterByArea) }}
+            </div>
+        </div>
+    <div class="row mb-3">
+                {{ form_label(VoteEventFormType.filterByTableType) }}
+                <div class="col">
+                    {{ form_widget(VoteEventFormType.filterByTableType) }}
+                </div>
+            </div>
+    <div class="row mb-3">
+                    {{ form_label(VoteEventFormType.filterByTag) }}
+                    <div class="col">
+                        {{ form_widget(VoteEventFormType.filterByTag) }}
+                    </div>
+                </div>
+        <div class="row mb-3">
+    <div class="col offset-3">
+        <input type="submit" class="btn btn-primary" value="Save Vote Event " />
+    </div>
+    {{ form_end(VoteEventFormType) }}
+
+</div>
+{% endblock %}
