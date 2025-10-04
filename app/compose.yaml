@@ -15,7 +15,7 @@ services:
     environment:
       - APP_ENV=${APP_ENV:-dev}
       - APP_SECRET=${APP_SECRET:-ChangeThisSecretKey}
-      - DATABASE_URL=mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD:-!ChangeMe!}@database:3306/${MYSQL_DATABASE:-app}?serverVersion=8.0&charset=utf8mb4
+      - DATABASE_URL=mysql://${MARIADB_USER:-app}:${MARIADB_PASSWORD:-!ChangeMe!}@database:3306/${MARIADB_DATABASE:-app}?serverVersion=11.2.6-MariaDB&charset=utf8mb4
       - MAILER_DSN=smtp://mailer:1025
       - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS:-noreply@vendhound.local}
       - EMAIL_FROM_NAME=${EMAIL_FROM_NAME:-VendHound}
@@ -27,15 +27,15 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: mysql:${MYSQL_VERSION:-8.0}
+    image: mariadb:${MARIADB_VERSION:-11.2}
     container_name: vendhound_db
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
-      MYSQL_USER: ${MYSQL_USER:-app}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-!ChangeMe!}
+      MARIADB_USER: ${MARIADB_USER:-app}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-!ChangeMe!}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       timeout: 5s
       retries: 5
       start_period: 60s

@@ -18,14 +18,14 @@ APP_ENV=dev
 APP_SECRET=ChangeThisSecretKeyInProduction
 
 # Database configuration for Docker
-DATABASE_URL="mysql://app:!ChangeMe!@database:3306/app?serverVersion=8.0&charset=utf8mb4"
+DATABASE_URL="mysql://app:!ChangeMe!@database:3306/app?serverVersion=11.2.6-MariaDB&charset=utf8mb4"
 
-# MySQL configuration
-MYSQL_DATABASE=app
-MYSQL_USER=app
-MYSQL_PASSWORD=!ChangeMe!
-MYSQL_ROOT_PASSWORD=!ChangeMe!
-MYSQL_VERSION=8.0
+# MariaDB configuration
+MARIADB_DATABASE=app
+MARIADB_USER=app
+MARIADB_PASSWORD=!ChangeMe!
+MARIADB_ROOT_PASSWORD=!ChangeMe!
+MARIADB_VERSION=11.2
 
 # Mailer configuration
 MAILER_DSN=smtp://mailer:1025
@@ -46,7 +46,7 @@ docker-compose up -d --build
 
 This will:
 - Build the PHP application container
-- Start the MySQL database
+- Start the MariaDB database
 - Start the Mailpit mail server (for development)
 
 ### 3. Install Dependencies
@@ -67,7 +67,7 @@ docker-compose exec app php bin/console doctrine:migrations:migrate
 
 - **Application:** http://localhost:8080
 - **Mailpit UI:** http://localhost:8025 (to view emails sent during development)
-- **MySQL:** localhost:3306
+- **MariaDB:** localhost:3306
 
 ## Useful Commands
 
@@ -104,7 +104,7 @@ docker-compose exec app php bin/console cache:clear
 ## Services
 
 - **app**: PHP 8.2 with Apache running the Symfony application (port 8080)
-- **database**: MySQL 8.0 (port 3306)
+- **database**: MariaDB 11.2 (port 3306)
 - **mailer**: Mailpit for email testing (ports 1025/8025)
 
 ## Troubleshooting
