@@ -30,10 +30,14 @@ class Category
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
     private DateTime $createdOn;
 
+    #[ORM\Column(length: 10)]
+    private string $color;
+
     public function __construct()
     {
         $this->createdOn = new DateTime();
         $this->dealerships = new ArrayCollection();
+        $this->color = $this->randomizeColor();
     }
 
     public function getId(): ?int
@@ -97,5 +101,24 @@ class Category
         return $this;
     }
 
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
 
+    public function setColor(string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+        private function randomizeColor()
+        {   $color = '#';
+            for ($c = 0; $c < 3; $c++) {
+                $hex = str_pad(dechex(rand(0,255)), '2', '0', STR_PAD_LEFT);
+                $color .= $hex;
+            }
+            return $color;
+        }
 }

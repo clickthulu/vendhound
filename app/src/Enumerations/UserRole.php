@@ -2,6 +2,8 @@
 
 namespace App\Enumerations;
 
+use App\Exception\RoleNotFoundException;
+
 class UserRole implements OptionEnumerationInterface
 {
     const DESC_DEVELOPER = 'Developer of the VendHound code';
@@ -21,7 +23,7 @@ class UserRole implements OptionEnumerationInterface
     const ROLE_USER = "ROLE_USER";
 
 
-public function toArray(): array
+    public function toArray(): array
     {
         return [
             self::DESC_DEVELOPER => self::ROLE_DEVELOPER,
@@ -33,5 +35,22 @@ public function toArray(): array
             self::DESC_USER => self::ROLE_USER
         ];
     }
+    
+    public static function normalize($role)
+    {
+        switch (strtoupper($role)) {
+            case self::ROLE_DEVELOPER:
+                return self::ROLE_DEVELOPER;
+            case self::ROLE_ADMIN:
+                return self::ROLE_ADMIN;
+            case self::ROLE_CURATOR:
+                return self::ROLE_CURATOR;
+            case self::ROLE_DEALER:
+                return self::ROLE_DEALER;
+            case self::ROLE_ASSISTANT:
+                return self::ROLE_ASSISTANT;
+        }
+        throw new RoleNotFoundException("Role {$role} was not found");
+    }    
 
 }

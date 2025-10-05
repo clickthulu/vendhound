@@ -29,8 +29,8 @@ class DeveloperController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
         return new RedirectResponse($this->generateUrl('app_dashboard'));
     }
 
-    #[Route('/developer/promoteToAdmin', name: 'app_developer_promoteme')]
-    public function makeMeAdminstrator(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
+    #[Route('/developer/promoteToAdmin/{role}', name: 'app_developer_promoteme')]
+    public function makeMeAdminstrator(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager, string $role = "ROLE_ADMIN" )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $env = $parameterBag->get('app.environment');
@@ -43,7 +43,7 @@ class DeveloperController extends \Symfony\Bundle\FrameworkBundle\Controller\Abs
          */
         $user = $this->getUser();
         $roles = $user->getRoles();
-        $roles[] = 'ROLE_ADMIN';
+        $roles[] = $role;
         $roles = array_unique($roles);
         $user->setRoles($roles);
         $entityManager->persist($user);

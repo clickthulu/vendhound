@@ -15,13 +15,14 @@
         {{ form_label(categoryForm.name) }}
         <div class="col input-group">
             {{ form_widget(categoryForm.name) }}
+            {{ form_widget(categoryForm.color) }}
             <input type="submit" class="btn btn-primary" value="Add " />
         </div>
     </div>
     {{ form_end(categoryForm) }}
 
-    <td class="row">
-        <tr class="col">
+    <div class="row">
+        <div class="col">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -33,6 +34,8 @@
                 {% for category in categories %}
                     <tr>
                         <td class="col-1">{{ loop.index0 +1 }}</td>
+                        <td class="col-1">{% include "/common/svgimage.html.twig" with {color: category.color} %}</td>
+
                         <td class="col">{{ category.name }}</td>
                         <td class="col-1 text-end">
                             <a href="{{ url('app_admin_categorydelete', { id: category.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
