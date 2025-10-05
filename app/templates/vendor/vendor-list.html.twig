@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Vendor List{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Vendors</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <tr>
+                    <th>Vendor Name</th>
+                    <th>Owner</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                {% for vendor in vendors %}
+                    <tr>
+                        <td class="vendor-name cat-{{ vendor.primarycategory }}"
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

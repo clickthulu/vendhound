@@ -1,0 +1,1 @@
+<a href="{{ url('app_admin_toggleuserrole', { id: usr.id, role: role }) }}"><i  title="{{ role }}" class="fas {{ icon }} {% if role in usr.roles %}text-success{% else %}text-secondary{% endif %}"></i></a>

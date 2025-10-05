@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Users{% endblock %}
+
+{% block body %}
+    <div class="block col p-3" id="">
+        <div class="row mb-3">
+            <div class="col">
+                <h3>VendHound Users</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Email Address</th>
+                        <th colspan="5">Roles</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for usr in users %}
+                        <tr>
+                            <td class="col">{{ usr.email }}</td>
+                            <td class="col-1">
+                                {% if "ROLE_DEVELOPER" in app.user.roles %}
+                                    {% include '/admin/userrole.component.html.twig' with { usr: usr, role: 'ROLE_DEVELOPER', icon: 'fa-code' } %}
+                                {% else %}
+                                    <i class="fas fa-code text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td class="col-1">
+                                {% include '/admin/userrole.component.html.twig' with { usr: usr, role: 'ROLE_ADMIN', icon: 'fa-user-tie' } %}
+                            </td>
+                            <td class="col-1">
+                                {% include '/admin/userrole.component.html.twig' with { usr: usr, role: 'ROLE_CURATOR', icon: 'fa-scale-balanced' } %}
+                            </td>
+                            <td class="col-1">
+                                {% include '/admin/userrole.component.html.twig' with { usr: usr, role: 'ROLE_DEALER', icon: 'fa-shop' } %}
+                            </td>
+                            <td class="col-1">
+                                {% include '/admin/userrole.component.html.twig' with { usr: usr, role: 'ROLE_ASSISTANT', icon: 'fa-bag-shopping' } %}
+                            </td>
+                            <td class="col-1 ">
+                                <a href="{{ url('app_admin_useredit', { id: usr.id }) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td class="col-1 ">
+                                <a href="{{ url('app_admin_userdelete', { id: usr.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+    </div>
+    </div>
+    </div>
+{% endblock %}

@@ -7,6 +7,8 @@ use App\Entity\TableAddOn;
 use App\Entity\TableType;
 use App\Entity\User;
 use App\Entity\Category;
+use App\Enumerations\UserRole;
+use App\Exception\RoleNotFoundException;
 use App\Form\CategoryTypeForm;
 use App\Form\DealerAreaType;
 use App\Form\TableAddOnType;
@@ -170,6 +172,16 @@ final class AdminController extends AbstractController
     #[Route('/admin/table-addon', name: 'app_admin_tableaddon')]
     public function listTableAddon(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
         $tableAddons = $entityManager->getRepository(TableAddOn::class)->findBy([], ['name' => 'ASC']);
 
         return $this->render('admin/table-addon.html.twig', [
@@ -207,7 +219,7 @@ final class AdminController extends AbstractController
                 $entityManager->persist($tableAddon);
                 $entityManager->flush();
                 $this->addFlash('info', "Table addon {$tableAddon->getName()} has been {$action}");
-                return new RedirectResponse($this->generateUrl('app_admin_tabletype'));
+                return new RedirectResponse($this->generateUrl('app_admin_tableaddon'));
             }
         } catch (Exception $e) {
             $err = new FormError($e->getMessage());
@@ -305,10 +317,8 @@ final class AdminController extends AbstractController
         return new RedirectResponse($this->generateUrl('app_admin_dealerarea'));
     }
 
-
-
-    #[Route('/admin/dealership/deleteall', name: 'app_admin_deleteallvendors')]
-    public function deleteAllDealerships(EntityManagerInterface $entityManager): Response
+    #[Route('/admin/users', name: 'app_admin_userlist')]
+    public function userList(EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /**
@@ -320,11 +330,15 @@ final class AdminController extends AbstractController
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
 
-        return $this->render("admin//dealer-delete-all.html.twig");
+        $users = $entityManager->getRepository(User::class)->findBy([], ['email' => 'ASC']);
+
+        return $this->render("/admin/user-list.html.twig", [ 'users' => $users ]);
+
+
     }
 
-    #[Route('/admin/dealership/deleteall/confirm', name: 'app_admin_deleteallvendorsconfirm')]
-    public function deleteAllDealershipsConfirm(EntityManagerInterface $entityManager): RedirectResponse
+    #[Route('/admin/users/role/{id}/{role}', name: 'app_admin_toggleuserrole')]
+    public function toggleRole(EntityManagerInterface $entityManager, int $id, string $role): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /**
@@ -335,11 +349,66 @@ final class AdminController extends AbstractController
             $this->addFlash('error', 'You do not have permission to perform this action');
             return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
         }
-        $dql = "DELETE FROM App\Entity\Dealership";
-        $query = $entityManager->createQuery($dql);
-        $deleted = $query->execute();
-        $this->addFlash("warning", "{$deleted} dealerships have been removed from the table.");
-        return new RedirectResponse($this->generateUrl('app_dashboard'));
+
+        $currentuser = $entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+        $roles = $currentuser->getRoles();
+        try {
+            $role = UserRole::normalize($role);
+            if (in_array($role, $roles)) {
+                // remove role from user
+                $currentuser->removeRole($role);
+            } else {
+                // add role to user
+                $currentuser->addRole($role);
+            }
+            $entityManager->persist($currentuser);
+            $entityManager->flush();
+
+        } catch (RoleNotFoundException) {
+
+        }
+
+
+        return new RedirectResponse($this->generateUrl('app_admin_userlist'));
+
+
     }
+
+    #[Route('/admin/users/edit/{id}', name: 'app_admin_useredit')]
+    public function userEdit(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        return $this->render("/intentional-blank.html.twig");
+
+
+    }
+
+    #[Route('/admin/users/delete/{id}', name: 'app_admin_userdelete')]
+    public function userDelete(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        if (!in_array("ROLE_DEVELOPER", $user->getRoles()) && !in_array("ROLE_ADMIN", $user->getRoles())) {
+            $this->addFlash('error', 'You do not have permission to perform this action');
+            return new RedirectResponse($this->generateUrl("app_dashboard"), 403);
+        }
+
+        return $this->render("/intentional-blank.html.twig");
+
+
+    }
+
 
 }

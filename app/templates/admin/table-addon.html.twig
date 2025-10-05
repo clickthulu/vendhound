@@ -24,7 +24,7 @@
                 {% for table in tableAddons %}
                     <tr>
                         <td class="col-1">{{ loop.index0 +1 }}</td>
-                        <td class="col">{{ table.name }} ( ${{ table.cost }} )</td>
+                        <td class="col">{{ table.name }} ( ${{ table.additionalCost }} )</td>
                         <td class="btn-group">
                             <a href="{{ url('app_admin_tableaddonedit', { id: table.id }) }}" class="btn btn-small btn-primary"><i class="fas fa-edit"></i></a>
                             <a href="{{ url('app_admin_tableaddondelete', { id: table.id }) }}" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>

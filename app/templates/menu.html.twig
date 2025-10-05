@@ -80,6 +80,10 @@
             <div class="sidebar-item col p-3"><a href="{{ url('app_admin_dealerarea') }}" class=" text-info"><i class="fas fa-map"></i> Dealer Areas</a></div>
         </div>
         <div class="row">
+            <div class="sidebar-item col p-3"><a href="{{ url('app_admin_userlist') }}" class=" text-secondary"><i class="fas fa-users"></i> Users</a></div>
+        </div>
+
+        <div class="row">
             <div class="sidebar-item disabled col p-3"><a href="{{ url('app_none') }}" class="disabled" ><i class="fas fa-poll-h"></i> Create Vote</a></div>
         </div>
         <div class="row">
@@ -116,10 +120,13 @@
             <div class="sidebar-header"><h4>Developer</h4></div>
         </div>
         <div class="row">
-            <div class="sidebar-item col p-3"><a href="{{ url('app_developer_promoteme') }}"  class="link-danger"><i class="fas fa-exclamation-triangle"></i> Make Me An Admin</a></div>
+            <div class="sidebar-item col p-3"><a href="{{ url('app_developer_promoteme', {role: 'ROLE_DEVELOPER' }) }}"  class="link-danger"><i class="fas fa-exclamation-triangle"></i> Make Me A Developer</a></div>
         </div>
         <div class="row">
-            <div class="sidebar-item col p-3"><a href="{{ url('app_developer_flashtest') }}"  class="link-warning"><i class="fas fa-bread-slice"></i> Test Flashes</a></div>
+            <div class="sidebar-item col p-3"><a href="{{ url('app_developer_promoteme', {role: 'ROLE_ADMIN' }) }}"  class="link-warning"><i class="fas fa-exclamation-triangle"></i> Make Me An Admin</a></div>
+        </div>
+        <div class="row">
+            <div class="sidebar-item col p-3"><a href="{{ url('app_developer_flashtest') }}"  class="link-info"><i class="fas fa-bread-slice"></i> Test Flashes</a></div>
         </div>
 
     {% endif %}
